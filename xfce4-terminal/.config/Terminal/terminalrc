@@ -1,5 +1,7 @@
 [Configuration]
 MiscCursorShape=TERMINAL_CURSOR_SHAPE_UNDERLINE
+FontName=Liberation Mono 11
+ScrollingLines=10000
 ColorCursor=#0f0f49499999
 ColorForeground=#838394949696
 ColorBackground=#00002b2b3636
@@ -19,4 +21,4 @@ ColorPalette13=#838394949696
 ColorPalette14=#6c6c7171c4c4
 ColorPalette15=#9393a1a1a1a1
 ColorPalette16=#fdfdf6f6e3e3
-Term=xterm-color
+Term=xterm-256color
