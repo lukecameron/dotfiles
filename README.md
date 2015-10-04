@@ -1,6 +1,6 @@
-# my dotfiles
+### dotfiles
 
-# setup
+#### setup
 
 - install GNU Stow (`brew install stow` / `apt-get install stow`)
 - Clone into a directory under in home (I use `~/dotfiles`)
