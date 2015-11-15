@@ -15,6 +15,7 @@ NeoBundle 'vim-scripts/Color-Scheme-Explorer'
 NeoBundle 'jscappini/material.vim'
 NeoBundle 'modess/vim-phpcolors'
 NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'tpope/vim-fireplace'
 
 call neobundle#end()
 NeoBundleCheck
@@ -54,8 +55,26 @@ nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
 
+" nicer scrolling using alt and jk/fd
+" not sure which I like better yet
 nnoremap ∆ <C-d> " alt-j on os x
 nnoremap ˚ <C-u> " alt-k on os x
+nnoremap ƒ <C-d> " alt-f on os x
+nnoremap ∂ <C-u> " alt-d on os x
+
+" nicer window movements using leader-hjkl
+nnoremap <Leader>j :wincmd j<CR>
+nnoremap <Leader>k :wincmd k<CR>
+nnoremap <Leader>h :wincmd h<CR>
+nnoremap <Leader>l :wincmd l<CR>
+ 
+" close current buffer/window with leader-w/c
+nnoremap <Leader>w :bd<CR>
+nnoremap <Leader>c :wincmd c<CR>
+
+" use command window for ex mode 
+"noremap : q:I
+
 
 
 " vim-airline
