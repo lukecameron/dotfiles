@@ -16,11 +16,10 @@ NeoBundle 'jscappini/material.vim'
 NeoBundle 'modess/vim-phpcolors'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'tpope/vim-fireplace'
+NeoBundle 'scrooloose/nerdtree'
 
 call neobundle#end()
 NeoBundleCheck
-
-
 
 set background=dark
 set t_Co=256
@@ -32,11 +31,27 @@ inoremap jk <ESC>
 
 let mapleader = "\<Space>"
 
+" code formatting
 filetype plugin indent on
-syntax on
 set encoding=utf-8
+"set tabstop=2
+set softtabstop=2
+set expandtab
+set shiftwidth=2
+
+syntax on
 set laststatus=2
 set mouse=a
+
+" clojure
+let g:clojure_fuzzy_indent = 1
+
+" kill all bells
+" unfortunately there is no way to get iterm2 to use alt key
+" the way vim wants to, the only way I found was with
+" an esc prefix. This causes a bell sound in normal mode.
+set noerrorbells visualbell t_vb=
+autocmd GUIEnter * set visualbell t_vb=
 
 " allow switching buffers without saving
 set hidden
@@ -74,8 +89,6 @@ nnoremap <Leader>c :wincmd c<CR>
 
 " use command window for ex mode 
 "noremap : q:I
-
-
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
