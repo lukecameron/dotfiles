@@ -1,45 +1,21 @@
-" NeoBundle
-let g:neobundle#types#git#default_protocol='git'
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Bundles
-NeoBundle 'kien/ctrlp.vim'
-NeoBundle 'bling/vim-airline'
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'vim-scripts/Color-Scheme-Explorer'
-NeoBundle 'jscappini/material.vim'
-NeoBundle 'modess/vim-phpcolors'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'tpope/vim-fireplace'
-NeoBundle 'scrooloose/nerdtree'
-
-call neobundle#end()
-NeoBundleCheck
+execute pathogen#infect()
 
 set background=dark
 set t_Co=256
 colo hybrid
-syntax enable
 set number
-
-inoremap jk <ESC>
+set relativenumber
 
 let mapleader = "\<Space>"
 
 " code formatting
+syntax enable
 filetype plugin indent on
 set encoding=utf-8
-"set tabstop=2
 set softtabstop=2
 set expandtab
 set shiftwidth=2
 
-syntax on
 set laststatus=2
 set mouse=a
 
@@ -57,8 +33,11 @@ autocmd GUIEnter * set visualbell t_vb=
 set hidden
 
 " key mapping
+inoremap jk <ESC>
 nnoremap <Leader>b :bp<CR>
 nnoremap <Leader>n :bn<CR>
+nnoremap <C-h>     :bp<CR>
+nnoremap <C-l>     :bn<CR>
 nnoremap <Leader>1 :1b<CR>
 nnoremap <Leader>2 :2b<CR>
 nnoremap <Leader>3 :3b<CR>
@@ -76,6 +55,10 @@ nnoremap ∆ <C-d> " alt-j on os x
 nnoremap ˚ <C-u> " alt-k on os x
 nnoremap ƒ <C-d> " alt-f on os x
 nnoremap ∂ <C-u> " alt-d on os x
+
+" I think I also like scrolling with C-[jk] now I'm using capslock for ctrl
+nnoremap <C-j> <C-d>
+nnoremap <C-k> <C-u>
 
 " nicer window movements using leader-hjkl
 nnoremap <Leader>j :wincmd j<CR>
