@@ -1,7 +1,8 @@
 execute pathogen#infect()
 
-set background=dark
+"let g:hybrid_reduced_contrast = 1
 set t_Co=256
+set background=dark
 colo hybrid
 set number
 set relativenumber
@@ -19,6 +20,9 @@ set shiftwidth=2
 set clipboard=unnamed
 set laststatus=2
 set mouse=a
+set timeoutlen=1000 ttimeoutlen=0
+
+" reselect text when changing indentation
 vnoremap < <gv
 vnoremap > >gv
 
@@ -51,13 +55,6 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
-
-" nicer scrolling using alt and jk/fd
-" not sure which I like better yet
-nnoremap ∆ <C-d> " alt-j on os x
-nnoremap ˚ <C-u> " alt-k on os x
-nnoremap ƒ <C-d> " alt-f on os x
-nnoremap ∂ <C-u> " alt-d on os x
 
 " I think I also like scrolling with C-[jk] now I'm using capslock for ctrl
 nnoremap <C-j> <C-d>
