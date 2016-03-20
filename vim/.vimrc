@@ -16,8 +16,11 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 
+set clipboard=unnamed
 set laststatus=2
 set mouse=a
+vnoremap < <gv
+vnoremap > >gv
 
 " clojure
 let g:clojure_fuzzy_indent = 1
