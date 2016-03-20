@@ -16,3 +16,18 @@
 [submodule "vim/.vim/bundle/vim-eunuch"]
 	path = vim/.vim/bundle/vim-eunuch
 	url = git@github.com:tpope/vim-eunuch.git
+[submodule "vim/.vim/bundle/nerdtree"]
+	path = vim/.vim/bundle/nerdtree
+	url = git@github.com:scrooloose/nerdtree.git
+[submodule "vim/.vim/bundle/vim-airline"]
+	path = vim/.vim/bundle/vim-airline
+	url = git@github.com:vim-airline/vim-airline.git
+[submodule "vim/.vim/bundle/vim-coffee-script"]
+	path = vim/.vim/bundle/vim-coffee-script
+	url = git@github.com:kchmck/vim-coffee-script.git
+[submodule "vim/.vim/bundle/vim-colorschemes"]
+	path = vim/.vim/bundle/vim-colorschemes
+	url = git@github.com:flazz/vim-colorschemes.git
+[submodule "vim/.vim/bundle/vim-fireplace"]
+	path = vim/.vim/bundle/vim-fireplace
+	url = git@github.com:tpope/vim-fireplace.git
