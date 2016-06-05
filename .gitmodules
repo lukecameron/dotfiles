@@ -34,3 +34,9 @@
 [submodule "vim/.vim/bundle/vim-airline-themes"]
 	path = vim/.vim/bundle/vim-airline-themes
 	url = git@github.com:vim-airline/vim-airline-themes.git
+[submodule "vim/.vim/bundle/tabular"]
+	path = vim/.vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular
+[submodule "vim/.vim/bundle/vim-raml"]
+	path = vim/.vim/bundle/vim-raml
+	url = git@github.com:IN3D/vim-raml.git

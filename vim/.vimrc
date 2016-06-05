@@ -17,6 +17,10 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 
+" show invisibles
+set list!
+set listchars=tab:▸\ ,eol:¬
+
 set clipboard=unnamed
 set laststatus=2
 set mouse=a
@@ -55,6 +59,16 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
+
+" for aligning text
+nnoremap <Leader>a= :Tabularize /=<CR>
+nnoremap <Leader>a: :Tabularize /:<CR>
+nnoremap <Leader>a:: :Tabularize /:\zs<CR>
+nnoremap <Leader>a, :Tabularize /,<CR>
+nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
+
+" toggle nerdtree
+nnoremap <C-n> :NERDTreeToggle<CR>
 
 " I think I also like scrolling with C-[jk] now I'm using capslock for ctrl
 nnoremap <C-j> <C-d>

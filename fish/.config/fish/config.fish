@@ -1,0 +1,10 @@
+set -x PATH $PATH /Users/luke/.gem/ruby/2.0.0/bin
+set -x PATH $PATH /usr/local/sbin
+set -x PATH $PATH /Users/luke/bin
+set -x PATH $PATH /Users/luke/Misc/google-cloud-sdk/bin
+set -x PATH $PATH /Users/luke/.npm-packages/bin
+set -x PATH $PATH /Users/luke/Library/Android/sdk/tools
+set -x PATH $PATH /Users/luke/Library/Android/sdk/platform-tools
+set -x PATH $PATH /usr/local/bin
+set -x PATH $PATH /Users/luke/.rvm/bin
+set -x PATH $PATH /Users/luke/.rvm/bin
