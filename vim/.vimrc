@@ -1,11 +1,19 @@
-execute pathogen#infect()
 
+" currently using pathogen for vim and vim-plug for neovim
+if !has('nvim')
+  execute pathogen#infect()
+endif
+
+if has("termguicolors")
+  set termguicolors
+endif
 "let g:hybrid_reduced_contrast = 1
-set t_Co=256
-set background=dark
-colo hybrid
+"set t_Co=256
+"set background=dark
+colo sol
 set number
 set relativenumber
+set incsearch
 
 let mapleader = "\<Space>"
 
@@ -17,14 +25,17 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 
+" fuzzy find
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
 " show invisibles
 set list!
 set listchars=tab:▸\ ,eol:¬
-
 set clipboard=unnamed
 set laststatus=2
 set mouse=a
-set timeoutlen=1000 ttimeoutlen=0
+set timeoutlen=200 ttimeoutlen=0
 
 " reselect text when changing indentation
 vnoremap < <gv
@@ -37,14 +48,17 @@ let g:clojure_fuzzy_indent = 1
 " unfortunately there is no way to get iterm2 to use alt key
 " the way vim wants to, the only way I found was with
 " an esc prefix. This causes a bell sound in normal mode.
-set noerrorbells visualbell t_vb=
-autocmd GUIEnter * set visualbell t_vb=
+"set noerrorbells visualbell t_vb=
+"autocmd GUIEnter * set visualbell t_vb=
 
 " allow switching buffers without saving
 set hidden
 
 " key mapping
 inoremap jk <ESC>
+onoremap jk <ESC>
+vnoremap jk <ESC>
+cnoremap jk <ESC>
 nnoremap <Leader>b :bp<CR>
 nnoremap <Leader>n :bn<CR>
 nnoremap <C-h>     :bp<CR>
@@ -89,5 +103,5 @@ nnoremap <Leader>c :wincmd c<CR>
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 

@@ -40,3 +40,33 @@
 [submodule "vim/.vim/bundle/vim-raml"]
 	path = vim/.vim/bundle/vim-raml
 	url = git@github.com:IN3D/vim-raml.git
+[submodule "vim/.vim/bundle/elm.vim"]
+	path = vim/.vim/bundle/elm.vim
+	url = git@github.com:lambdatoast/elm.vim.git
+[submodule "vim/.vim/bundle/vim-scala"]
+	path = vim/.vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala.git
+[submodule "vim/.vim/bundle/rust.vim"]
+	path = vim/.vim/bundle/rust.vim
+	url = https://github.com/rust-lang/rust.vim
+[submodule "vim/.vim/bundle/base16-vim"]
+	path = vim/.vim/bundle/base16-vim
+	url = https://github.com/chriskempson/base16-vim.git
+[submodule "vim/.vim/bundle/vim-javascript"]
+	path = vim/.vim/bundle/vim-javascript
+	url = https://github.com/pangloss/vim-javascript
+[submodule "vim/.vim/bundle/vim-jsx"]
+	path = vim/.vim/bundle/vim-jsx
+	url = https://github.com/mxw/vim-jsx
+[submodule "vim/.vim/bundle/vim-wwdc17-theme"]
+	path = vim/.vim/bundle/vim-wwdc17-theme
+	url = https://github.com/lifepillar/vim-wwdc17-theme
+[submodule "vim/.vim/bundle/gruvbox"]
+	path = vim/.vim/bundle/gruvbox
+	url = https://github.com/morhetz/gruvbox
+[submodule "vim/.vim/bundle/sol"]
+	path = vim/.vim/bundle/sol
+	url = https://github.com/notpratheek/vim-sol
+[submodule "vim/.vim/bundle/vim-sol"]
+	path = vim/.vim/bundle/vim-sol
+	url = https://github.com/notpratheek/vim-sol
