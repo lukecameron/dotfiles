@@ -10,7 +10,10 @@ endif
 "let g:hybrid_reduced_contrast = 1
 "set t_Co=256
 "set background=dark
-colo sol
+
+if !has('nvim')
+  colo sol
+endif
 set number
 set relativenumber
 set incsearch
