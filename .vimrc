@@ -7,6 +7,7 @@ endif
 if has("termguicolors")
   set termguicolors
 endif
+
 "let g:hybrid_reduced_contrast = 1
 "set t_Co=256
 "set background=dark
@@ -92,9 +93,9 @@ nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
 " toggle nerdtree
 nnoremap <C-n> :NERDTreeToggle<CR>
 
-" I think I also like scrolling with C-[jk] now I'm using capslock for ctrl
-nnoremap <C-j> <C-d>
-nnoremap <C-k> <C-u>
+" fzf triggers
+nmap <C-p> :GFiles<CR>
+
 
 " nicer window movements using leader-hjkl
 nnoremap <Leader>j :wincmd j<CR>
@@ -108,6 +109,13 @@ nnoremap <Leader>c :wincmd c<CR>
 
 " use command window for ex mode 
 "noremap : q:I
+
+"Credit joshdick
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+if (has("nvim"))
+  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1

@@ -8,6 +8,8 @@ end
 # source aliases
 test -f ~/.config/fish/aliases.fish; and . ~/.config/fish/aliases.fish
 
+set -x FZF_DEFAULT_COMMAND 'fd --type f'
+
 # put /usr/local at the front, but not before the anaconda bin
 set -x PATH /usr/local/bin $PATH 
 

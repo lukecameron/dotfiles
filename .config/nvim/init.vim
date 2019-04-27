@@ -2,6 +2,7 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'ajh17/Spacegray.vim'
 Plug 'junegunn/seoul256.vim'
+Plug 'arcticicestudio/nord-vim'
 
 Plug 'tpope/vim-sensible'
 Plug 'scrooloose/nerdtree'
@@ -11,6 +12,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-eunuch'
 Plug 'kchmck/vim-coffee-script'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'reasonml-editor/vim-reason-plus'
 Plug 'autozimu/LanguageClient-neovim', {
@@ -39,8 +41,16 @@ Plug 'ncm2/ncm2-path'
 
 call plug#end()
 
+" set up Rg to work like Ag with fzf
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
-colo seoul256
+colo nord
