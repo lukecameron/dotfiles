@@ -47,6 +47,11 @@ vnoremap > >gv
 " clojure
 let g:clojure_fuzzy_indent = 1
 
+" reasonml
+let g:LanguageClient_serverCommands = {
+    \ 'reason': ['/Users/luke/bin/reason-language-server.exe']
+    \ }
+
 " kill all bells
 " unfortunately there is no way to get iterm2 to use alt key
 " the way vim wants to, the only way I found was with

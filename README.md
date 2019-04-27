@@ -1,14 +1,18 @@
 ### dotfiles
 
 #### setup
+To configure these dotfiles, look at [this article](https://www.atlassian.com/git/tutorials/dotfiles). My alias is `dotfiles` instead of `config` however.
 
-- install GNU Stow (`brew install stow` / `apt-get install stow`)
-- clone into a directory in home (I use `~/dotfiles`)
-- `cd dotfiles`
-- `stow <app name>` for any apps you want to configure
+See `.config/fish/aliases.fish` for the `dotfiles` alias. This can be used anywhere in the home directory normally as the `git` command would. For example to add a new file to the repo:
 
-`stow` creates symlinks in the parent directory of the working directory by default. it won't overwrite existing files with symlinks, so you'll have to `rm` them or use `--adopt`
+```
+dotfiles add .config/some-application/new-file.config
+dotfiles status
+dotfiles commit -a
+dotfiles push
+```
 
+#### neovim
+- `pip3 install pynvim`
+- open `nvim` and run `:PlugInstall`
 
-#### vim
-- for the plugins to work, you'll need to do `git submodule update --init --recursive` to pull the latest of all plugins
