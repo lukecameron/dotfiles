@@ -17,6 +17,8 @@ set -x JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Hom
 
 set -x PATH /Users/luke/Misc/android/platform-tools $PATH
 set -x PATH /Users/luke/.cargo/bin $PATH
+set -x PATH /Users/luke/Library/Android/sdk/build-tools $PATH
+set -x PATH /Users/luke/Library/Android/sdk/platform-tools $PATH
 
 set -x KUBECONFIG /Users/luke/cld/ed-infrastructure/kubernetes/staging/eks-config/config-ed-staging.yml
 
@@ -24,13 +26,14 @@ set -x KUBECONFIG /Users/luke/cld/ed-infrastructure/kubernetes/staging/eks-confi
 # otherwise you'll have to call `activate' even before
 # using conda and python. It's nice to have the root conda
 # env running by default.
-set -x PATH /Users/luke/anaconda2/bin $PATH 
-source (conda info --root)/etc/fish/conf.d/conda.fish
+#set -x PATH /Users/luke/anaconda2/bin $PATH 
+#source (conda info --root)/etc/fish/conf.d/conda.fish
 
 # everything else just bang on the end
 #set -x PATH $PATH /Users/luke/.gem/ruby/2.0.0/bin
 set -x PATH $PATH /usr/local/sbin
 set -x PATH $PATH /Users/luke/bin
+set -x PATH $PATH /usr/local/opt/mongodb-community@4.0/bin
 #set -x PATH $PATH /Users/luke/Misc/google-cloud-sdk/bin
 #set -x PATH $PATH /Users/luke/.npm-packages/bin
 #set -x PATH $PATH /Users/luke/Library/Android/sdk/tools

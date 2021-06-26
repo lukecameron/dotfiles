@@ -17,17 +17,18 @@ if !has('nvim')
 endif
 set number
 set relativenumber
-set incsearch
 
 let mapleader = "\<Space>"
 
+
 " code formatting
-syntax enable
-filetype plugin indent on
 set encoding=utf-8
 set softtabstop=2
 set expandtab
 set shiftwidth=2
+
+" make file
+autocmd FileType make setlocal noexpandtab
 
 " fuzzy find
 let g:ctrlp_working_path_mode = 0
@@ -35,7 +36,7 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 
 " show invisibles
 set list!
-set listchars=tab:▸\ ,eol:¬
+"set listchars=tab:▸\ ,eol:¬
 set clipboard=unnamed
 set laststatus=2
 set mouse=a
@@ -50,8 +51,14 @@ let g:clojure_fuzzy_indent = 1
 
 " reasonml
 let g:LanguageClient_serverCommands = {
-    \ 'reason': ['/Users/luke/bin/reason-language-server.exe']
+    \ 'reason': ['/Users/luke/bin/reason-language-server.exe'],
+    \ 'typescript': ['npx javascript-typescript-langserver']
     \ }
+
+" language client
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<cr>
+nnoremap <silent> gf :call LanguageClient_textDocument_formatting()<cr>
+nnoremap <silent> <C-i> :call LanguageClient_textDocument_hover()<cr>
 
 " kill all bells
 " unfortunately there is no way to get iterm2 to use alt key

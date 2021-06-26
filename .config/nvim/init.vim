@@ -19,15 +19,22 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'tpope/vim-fireplace'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'digitaltoad/vim-pug'
+Plug 'tpope/vim-fugitive'
+Plug 'w0rp/ale'
+Plug 'posva/vim-vue'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 " ncm (completion) is a whole thing of its own
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 
 " enable ncm2 for all buffers
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -41,8 +48,8 @@ Plug 'ncm2/ncm2-path'
 
 call plug#end()
 
-" set up Rg to work like Ag with fzf
-command! -bang -nargs=* Rg
+" set up Ag to use ripgrep
+command! -bang -nargs=* Ag
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
