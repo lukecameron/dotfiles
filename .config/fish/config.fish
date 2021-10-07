@@ -48,4 +48,4 @@ set -x PATH $PATH /usr/local/opt/mongodb-community@4.0/bin
 launchctl setenv PATH $PATH
 
 # fast.ai aliases converted to fish by me
-source ~/Projects/fastai-courses/setup/aws-alias.fish
+#source ~/Projects/fastai-courses/setup/aws-alias.fish

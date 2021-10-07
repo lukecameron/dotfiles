@@ -1,5 +1,6 @@
 
 " currently using pathogen for vim and vim-plug for neovim
+" note: I've moved neovim to init.lua, which is not calling this file at all
 if !has('nvim')
   execute pathogen#infect()
 endif

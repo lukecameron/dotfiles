@@ -13,6 +13,18 @@ dotfiles push
 ```
 
 #### neovim
-- `pip3 install pynvim`
-- open `nvim` and run `:PlugInstall`
+- install neovim >= 0.5 (as of writing this was HEAD)
+- open it and do :PackerSync
 
+
+#### homebrew stuff that's needed
+```
+ccls
+cmake
+neovim
+fd
+rg
+fish
+fzf
+```
+In particular, `fd` is needed as telescope (fuzzy finder) won't work well in nvim without it. `rg` is same for live grepping.
