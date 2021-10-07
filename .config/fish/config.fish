@@ -5,6 +5,8 @@ if not functions -q fisher
     fish -c fisher
 end
 
+fish_vi_key_bindings
+
 # source aliases
 test -f ~/.config/fish/aliases.fish; and . ~/.config/fish/aliases.fish
 
