@@ -1,0 +1,38 @@
+# --- Theme (auto light/dark) ---
+theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+
+# --- Font ---
+font-family = JetBrains Mono
+font-size = 14
+font-feature = +calt +liga
+font-thicken = false
+
+# --- Window ---
+background-opacity = 0.94
+background-blur = 20
+macos-titlebar-style = native
+window-padding-x = 10
+window-padding-y = 8
+window-decoration = auto
+
+# --- Cursor / mouse ---
+cursor-style = bar
+cursor-style-blink = true
+mouse-hide-while-typing = true
+copy-on-select = clipboard
+
+# --- Behavior ---
+shell-integration = detect
+confirm-close-surface = always
+clipboard-read = allow
+clipboard-write = allow
+link-url = true
+
+# --- Scrollback ---
+scrollback-limit = 100000
+
+# --- Shader (pick ONE — they don't compose) ---
+#custom-shader = ./shaders/bloom.glsl
+# custom-shader = ./shaders/crt.glsl
+# custom-shader = ./shaders/starfield.glsl
+#custom-shader = ./shaders/bettercrt.glsl

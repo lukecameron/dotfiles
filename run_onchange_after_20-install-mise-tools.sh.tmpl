@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+
+# mise config: {{ include "dot_config/mise/config.toml" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+if [ -x /opt/homebrew/bin/mise ]; then
+	mise=/opt/homebrew/bin/mise
+elif [ -x /usr/local/bin/mise ]; then
+	mise=/usr/local/bin/mise
+else
+	echo "mise was not installed by Homebrew." >&2
+	exit 1
+fi
+
+"$mise" install

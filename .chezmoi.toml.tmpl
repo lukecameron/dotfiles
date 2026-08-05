@@ -1,0 +1,7 @@
+{{- $roles := list "personal" "work" -}}
+{{- $role := promptChoiceOnce . "role" "Machine role" $roles "personal" -}}
+
+sourceDir = {{ .chezmoi.sourceDir | quote }}
+
+[data]
+    role = {{ $role | quote }}

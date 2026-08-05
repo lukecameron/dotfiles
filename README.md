@@ -1,30 +1,39 @@
-### dotfiles
+# Dotfiles
 
-#### setup
-To configure these dotfiles, look at [this article](https://www.atlassian.com/git/tutorials/dotfiles). My alias is `dotfiles` instead of `config` however.
+Personal macOS development environment, managed with [chezmoi](https://www.chezmoi.io/).
 
-See `.config/fish/aliases.fish` for the `dotfiles` alias. This can be used anywhere in the home directory normally as the `git` command would. For example to add a new file to the repo:
+The configuration currently targets Apple Silicon Macs. Linux support can be added when it is needed. The pre-Chezmoi configuration is retained in Git under the `legacy-2026-08-05` tag.
 
+## New machine
+
+Run:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+brew install chezmoi
+chezmoi init --apply lukecameron
 ```
-dotfiles add .config/some-application/new-file.config
-dotfiles status
-dotfiles commit -a
-dotfiles push
+
+Chezmoi asks whether the machine is `personal` or `work`. Packages are shared by default, with additive role-specific sections in `Brewfile.tmpl`.
+
+Authentication and secrets remain machine-local. Sign in to 1Password, the coding harnesses, and any other services after setup.
+
+## Everyday use
+
+```sh
+chezmoi edit ~/.zshrc
+chezmoi diff
+chezmoi apply
+chezmoi update
 ```
 
-#### neovim
-- install neovim >= 0.5 (as of writing this was HEAD)
-- open it and do :PackerSync
+Homebrew setup installs missing packages but deliberately does not remove anything else. Run `brew upgrade` when you want to update Homebrew-managed tools.
 
+Node's latest LTS release and Pi are installed by mise. Python runtimes and environments are installed on demand by uv.
 
-#### homebrew stuff that's needed
-```
-ccls
-cmake
-neovim
-fd
-rg
-fish
-fzf
-```
-In particular, `fd` is needed as telescope (fuzzy finder) won't work well in nvim without it. `rg` is same for live grepping.
+LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
+
+## Local configuration
+
+Use `~/.zprofile.local` and `~/.zshrc.local` for machine-only shell configuration. These files are intentionally unmanaged.

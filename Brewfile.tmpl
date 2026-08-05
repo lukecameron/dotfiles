@@ -1,0 +1,34 @@
+# Homebrew owns operating-system packages. This file is additive: setup never
+# removes packages that are not listed here.
+
+# Shell and dotfile management
+brew "chezmoi"
+brew "fzf"
+brew "mise"
+brew "starship"
+
+# Development essentials
+brew "fd"
+brew "git"
+brew "jq"
+brew "lazygit"
+brew "neovim"
+brew "ripgrep"
+brew "tree-sitter-cli"
+brew "uv"
+
+# Coding harnesses and terminal workflow
+brew "opencode"
+brew "herdr"
+cask "claude-code"
+cask "codex"
+cask "font-jetbrains-mono"
+cask "ghostty"
+
+{{- if eq .role "work" }}
+
+# Work-only packages belong here.
+{{- else if eq .role "personal" }}
+
+# Personal-only packages belong here.
+{{- end }}

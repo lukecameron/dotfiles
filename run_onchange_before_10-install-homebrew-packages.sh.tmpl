@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+# Brewfile: {{ include "Brewfile.tmpl" | sha256sum }}
+# Machine role: {{ .role }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+if [ -x /opt/homebrew/bin/brew ]; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+	eval "$(/usr/local/bin/brew shellenv)"
+else
+	echo "Homebrew is required; run bootstrap.sh first." >&2
+	exit 1
+fi
+
+brewfile=$(mktemp)
+trap 'rm -f "$brewfile"' EXIT HUP INT TERM
+chezmoi execute-template <"{{ joinPath .chezmoi.sourceDir "Brewfile.tmpl" }}" >"$brewfile"
+brew bundle --file "$brewfile"

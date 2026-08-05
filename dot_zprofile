@@ -1,0 +1,15 @@
+# Keep login-shell setup static and cheap.
+typeset -U path PATH
+
+path=($HOME/.local/bin $path)
+
+if [[ -d /opt/homebrew/bin ]]; then
+  path=(/opt/homebrew/bin /opt/homebrew/sbin $path)
+elif [[ -d /usr/local/Homebrew/bin ]]; then
+  path=(/usr/local/bin /usr/local/sbin $path)
+fi
+
+export EDITOR=nvim
+export VISUAL=nvim
+
+[[ -r $HOME/.zprofile.local ]] && source $HOME/.zprofile.local

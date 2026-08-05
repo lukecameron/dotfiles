@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+input=$(cat)
+if [ -z "$input" ]; then
+	input='{}'
+fi
+
+printf '%s\n' "$input" | jq '.skipDangerousModePermissionPrompt = true'

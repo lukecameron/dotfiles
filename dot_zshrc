@@ -1,0 +1,55 @@
+# History
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt share_history
+
+# Vim editing with prefix-aware history search on the arrow keys.
+bindkey -v
+KEYTIMEOUT=1
+
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+for keymap in viins vicmd; do
+  bindkey -M $keymap '^[[A' up-line-or-beginning-search
+  bindkey -M $keymap '^[[B' down-line-or-beginning-search
+done
+
+# Runtime activation precedes completion discovery. If this becomes the dominant
+# startup cost, switching to mise shims does not require changing tool ownership.
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+fi
+
+autoload -Uz compinit
+compinit -C -d ${ZDOTDIR:-$HOME}/.zcompdump
+
+# Source fzf's static bindings instead of spawning `fzf --zsh` at startup.
+# ZLE is unavailable in forced interactive shells without a terminal.
+if [[ -o zle && -t 0 ]]; then
+  if [[ -r /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
+    source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+  elif [[ -r /usr/local/opt/fzf/shell/key-bindings.zsh ]]; then
+    source /usr/local/opt/fzf/shell/key-bindings.zsh
+  fi
+fi
+
+export FZF_CTRL_R_OPTS='--height=60% --layout=reverse --border'
+
+if (( $+commands[starship] )); then
+  eval "$(starship init zsh)"
+fi
+
+alias g=git
+alias v=nvim
+alias ll='ls -lah'
+
+[[ -r $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
