@@ -37,3 +37,5 @@ LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvi
 ## Local configuration
 
 Use `~/.zprofile.local` and `~/.zshrc.local` for machine-only shell configuration. These files are intentionally unmanaged.
+
+Codex's `config.toml` is a create-only seed. Chezmoi supplies initial defaults on a new machine, then leaves the file untouched so Codex can persist session settings locally without creating dotfile drift.
