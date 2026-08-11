@@ -1,6 +1,8 @@
 # Homebrew owns operating-system packages. This file is additive: setup never
 # removes packages that are not listed here.
 
+tap "rjyo/moshi", trusted: true
+
 # Shell and dotfile management
 brew "chezmoi"
 brew "fzf"
@@ -20,6 +22,7 @@ brew "uv"
 
 # Coding harnesses and terminal workflow
 brew "mosh"
+brew "rjyo/moshi/moshi-hook", restart_service: true
 brew "opencode"
 brew "herdr"
 cask "claude-code"

@@ -46,6 +46,8 @@ mosh luke@machine-name
 
 The tailnet policy must allow TCP port 22 and UDP ports 60000–61000 from the client to the destination.
 
+`moshi-hook` is installed from the trusted `rjyo/moshi` tap and registered as a per-user service. Its pairing token and generated agent-hook configuration remain machine-local.
+
 ## Local configuration
 
 Use `~/.zprofile.local` and `~/.zshrc.local` for machine-only shell configuration. These files are intentionally unmanaged.
