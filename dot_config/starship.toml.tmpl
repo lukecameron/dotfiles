@@ -1,7 +1,12 @@
+{{- $defaultMachineName := "m1-air" -}}
+{{- if eq .role "work" -}}
+{{- $defaultMachineName = "mitti-air" -}}
+{{- end -}}
+{{- $machineName := get . "machineName" | default $defaultMachineName -}}
 # Minimal, colourful prompt.
 
 format = """
-[](#9B59B6)\
+[{{ $machineName }}](bold #9B59B6) \
 $directory\
 $git_branch\
 $git_status\

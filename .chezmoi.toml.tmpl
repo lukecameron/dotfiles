@@ -1,7 +1,14 @@
 {{- $roles := list "personal" "work" -}}
 {{- $role := promptChoiceOnce . "role" "Machine role" $roles "personal" -}}
+{{- $machineNames := list "m1-air" "mitti-air" -}}
+{{- $defaultMachineName := "m1-air" -}}
+{{- if eq $role "work" -}}
+{{- $defaultMachineName = "mitti-air" -}}
+{{- end -}}
+{{- $machineName := promptChoiceOnce . "machineName" "Machine prompt name" $machineNames $defaultMachineName -}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
     role = {{ $role | quote }}
+    machineName = {{ $machineName | quote }}
