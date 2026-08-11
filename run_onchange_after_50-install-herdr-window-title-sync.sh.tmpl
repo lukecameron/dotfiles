@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+# rjyo/herdr-window-title-sync: b07f1140b7308d66487b2f4be546c0c7db065569
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+if [ -x /opt/homebrew/bin/herdr ]; then
+	herdr=/opt/homebrew/bin/herdr
+elif [ -x /usr/local/bin/herdr ]; then
+	herdr=/usr/local/bin/herdr
+else
+	echo "Herdr was not installed by Homebrew." >&2
+	exit 1
+fi
+
+"$herdr" plugin install rjyo/herdr-window-title-sync \
+	--ref b07f1140b7308d66487b2f4be546c0c7db065569 \
+	--yes
