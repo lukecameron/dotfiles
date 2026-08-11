@@ -1,0 +1,11 @@
+# Keep executable discovery consistent for interactive shells and remote
+# commands such as the mosh-server process started over SSH.
+typeset -U path PATH
+
+path=($HOME/.local/bin $path)
+
+if [[ -d /opt/homebrew/bin ]]; then
+  path=(/opt/homebrew/bin /opt/homebrew/sbin $path)
+elif [[ -d /usr/local/Homebrew/bin ]]; then
+  path=(/usr/local/bin /usr/local/sbin $path)
+fi

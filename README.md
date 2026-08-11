@@ -34,6 +34,16 @@ Node's latest LTS release and Pi are installed by mise. Python runtimes and envi
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 
+## Remote shell
+
+Mosh is installed on every machine and runs over Tailscale. On each destination Mac, enable **System Settings → General → Sharing → Remote Login**, then connect using its Tailscale MagicDNS name:
+
+```sh
+mosh luke@machine-name
+```
+
+The tailnet policy must allow TCP port 22 and UDP ports 60000–61000 from the client to the destination.
+
 ## Local configuration
 
 Use `~/.zprofile.local` and `~/.zshrc.local` for machine-only shell configuration. These files are intentionally unmanaged.
