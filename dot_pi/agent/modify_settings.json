@@ -11,5 +11,18 @@ printf '%s\n' "$input" | jq '
   | .defaultProvider = "openai-codex"
   | .defaultModel = "gpt-5.5"
   | .defaultThinkingLevel = "medium"
-  | .packages = ((.packages // []) | map(select(. != "npm:pi-autoresearch")))
+  | .hideThinkingBlock = true
+  | .quietStartup = true
+  | .collapseChangelog = true
+  | .steeringMode = "all"
+  | .followUpMode = "all"
+  | .npmCommand = ["mise", "exec", "--", "npm"]
+  | .packages = (
+      (.packages // [])
+      | map(select(
+          . != "npm:pi-autoresearch"
+          and (if type == "string" then (test("^npm:pi-web-access(?:@|$)") | not) else true end)
+        ))
+      + ["npm:pi-web-access@0.14.0"]
+    )
 '
