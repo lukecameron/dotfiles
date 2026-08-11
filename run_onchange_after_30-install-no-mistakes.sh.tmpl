@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+# The official layout gives the self-updater and launchd daemon a stable,
+# user-owned executable path.
+PATH="$HOME/.local/bin:$PATH"
+export PATH
+export NO_MISTAKES_TELEMETRY=0
+
+if command -v no-mistakes >/dev/null 2>&1; then
+	exit 0
+fi
+
+curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh

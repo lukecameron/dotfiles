@@ -9,3 +9,5 @@ if [[ -d /opt/homebrew/bin ]]; then
 elif [[ -d /usr/local/Homebrew/bin ]]; then
   path=(/usr/local/bin /usr/local/sbin $path)
 fi
+
+export NO_MISTAKES_TELEMETRY=0

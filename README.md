@@ -30,7 +30,7 @@ chezmoi update
 
 Homebrew setup installs missing packages but deliberately does not remove anything else. Run `brew upgrade` when you want to update Homebrew-managed tools.
 
-Node's latest LTS release and Pi are installed by mise. Python runtimes and environments are installed on demand by uv.
+Node's latest LTS release, Pi, Treehouse, and the AXI command-line tools are installed by mise. No Mistakes uses its official user-local layout so its self-updater and launchd daemon share a stable executable path. Python runtimes and environments are installed on demand by uv.
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 

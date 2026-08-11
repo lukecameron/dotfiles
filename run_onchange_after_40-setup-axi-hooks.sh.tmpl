@@ -1,8 +1,6 @@
 #!/bin/sh
 set -eu
 
-# mise config: {{ include "dot_config/mise/config.toml" | sha256sum }}
-
 if [ "{{ .chezmoi.os }}" != "darwin" ]; then
 	exit 0
 fi
@@ -16,5 +14,5 @@ else
 	exit 1
 fi
 
-"$mise" trust --quiet "$HOME/.config/mise/config.toml"
-"$mise" install
+"$mise" exec -- gh-axi setup hooks
+"$mise" exec -- chrome-devtools-axi setup hooks
