@@ -18,6 +18,8 @@ bindkey -v
 KEYTIMEOUT=1
 
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 for keymap in viins vicmd; do
   bindkey -M $keymap '^[[A' up-line-or-beginning-search
   bindkey -M $keymap '^[[B' down-line-or-beginning-search
@@ -31,6 +33,16 @@ fi
 
 autoload -Uz compinit
 compinit -C -d ${ZDOTDIR:-$HOME}/.zcompdump
+
+# Keep suggestions responsive and consider both history and completions.
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+if [[ -r /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -r /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 
 # Source fzf's static bindings instead of spawning `fzf --zsh` at startup.
 # ZLE is unavailable in forced interactive shells without a terminal.

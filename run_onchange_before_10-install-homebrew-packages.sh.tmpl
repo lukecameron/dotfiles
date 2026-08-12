@@ -20,4 +20,4 @@ fi
 brewfile=$(mktemp)
 trap 'rm -f "$brewfile"' EXIT HUP INT TERM
 chezmoi execute-template <"{{ joinPath .chezmoi.sourceDir "Brewfile.tmpl" }}" >"$brewfile"
-brew bundle --file "$brewfile"
+brew bundle install --no-upgrade --file "$brewfile"

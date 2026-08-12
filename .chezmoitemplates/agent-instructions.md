@@ -7,3 +7,5 @@ When doing bug fixes, always start with reproducing the bug in an E2E setting as
 When end-to-end testing a product, be picky about the UI you see and be obsessed with pixel perfection. If something clearly looks off, even if it is not directly related to what you are doing, try to get it fixed along the way.
 
 Apply that same high standard to engineering excellence: lint, test failures, and test flakiness. If you see one, even if it is not caused by what you are working on right now, still get it fixed.
+
+For long-running commands and external processes, keep progress observable and persist intermediate results often enough that an interruption loses minutes, not hours. Track the exact process or session; do not infer completion from broad process-name matching.
