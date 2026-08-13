@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Change"
+  short_description: "Evidence-backed review of code changes"
+  default_prompt: "Use $review-change to review this branch against its base."

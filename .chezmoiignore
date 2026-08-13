@@ -1,5 +1,6 @@
 README.md
 AGENTS.md
 bootstrap.sh
+Brewfile
 chezmoistate.boltdb
 .config/nvim/lazyvim.json

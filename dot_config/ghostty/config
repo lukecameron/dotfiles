@@ -22,7 +22,9 @@ mouse-hide-while-typing = true
 copy-on-select = clipboard
 
 # --- Behavior ---
-shell-integration = detect
+keybind = shift+enter=text:\x1b\r
+shell-integration = zsh
+shell-integration-features = ssh-env,ssh-terminfo
 confirm-close-surface = always
 clipboard-read = allow
 clipboard-write = allow

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Change"
+  short_description: "Preregister and assess change evaluations"
+  default_prompt: "Use $evaluate-change to preregister and run this evaluation."

@@ -34,7 +34,11 @@ Node's latest LTS release, Pi, Treehouse, and the AXI command-line tools are ins
 
 Bun is installed by Homebrew for Herdr plugins so long-lived Herdr servers have a stable runtime path. The managed `rjyo/herdr-window-title-sync` plugin publishes the focused Herdr workspace, tab, and agent session through the outer terminal title so Moshi can identify resumed sessions; its local-session fallback can include recent Codex or Claude prompt text in that title.
 
+The Herdr Smart Rename plugin is pinned to a known commit and installed automatically after Herdr and mise tools are available.
+
 Pi's global settings are merged into its existing file so authentication, sessions, trust decisions, and caches stay machine-local. The managed settings keep startup quiet, deliver queued steering and follow-ups together, and pin `pi-web-access` for web research. Pi invokes npm through mise, and its terminal title shows the machine short name plus the current session or directory while it works.
+
+Shared agent guidance is rendered for each supported harness. Reusable cross-agent workflows live in `~/.agents/skills`; this setup includes evidence-backed change review and preregistered evaluation skills.
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 
