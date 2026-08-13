@@ -21,3 +21,6 @@ brewfile=$(mktemp)
 trap 'rm -f "$brewfile"' EXIT HUP INT TERM
 chezmoi execute-template <"{{ joinPath .chezmoi.sourceDir "Brewfile.tmpl" }}" >"$brewfile"
 brew bundle install --no-upgrade --file "$brewfile"
+
+# Configure the global LFS filters without changing hooks in this repository.
+git lfs install --skip-repo
