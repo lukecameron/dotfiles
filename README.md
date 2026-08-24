@@ -15,7 +15,7 @@ brew install chezmoi
 chezmoi init --apply lukecameron
 ```
 
-Chezmoi asks whether the machine is `personal` or `work` and which short name (`m1-air` or `mitti-air`) to show in the prompt. The short name defaults to `m1-air` for personal machines and `mitti-air` for work machines. Packages are shared by default, with additive role-specific sections in `Brewfile.tmpl`.
+Chezmoi asks whether the machine is `personal` or `work` and which short name (`m1-air`, `mitti-air`, or `slate-pro`) to show in the prompt. The short name defaults to `m1-air` for personal machines and `mitti-air` for work machines. Packages are shared by default, with additive role-specific sections in `Brewfile.tmpl`.
 
 Authentication and secrets remain machine-local. Sign in to 1Password, the coding harnesses, and any other services after setup.
 

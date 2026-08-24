@@ -1,6 +1,6 @@
 {{- $roles := list "personal" "work" -}}
 {{- $role := promptChoiceOnce . "role" "Machine role" $roles "personal" -}}
-{{- $machineNames := list "m1-air" "mitti-air" -}}
+{{- $machineNames := list "m1-air" "mitti-air" "slate-pro" -}}
 {{- $defaultMachineName := "m1-air" -}}
 {{- if eq $role "work" -}}
 {{- $defaultMachineName = "mitti-air" -}}
