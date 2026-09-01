@@ -1,9 +1,12 @@
 # Homebrew owns operating-system packages. This file is additive: setup never
 # removes packages that are not listed here.
 
+tap "ariga/tap"
 tap "rjyo/moshi", trusted: true
+tap "withgraphite/tap"
 
 # Shell and dotfile management
+brew "bash"
 brew "chezmoi"
 brew "fzf"
 brew "mise"
@@ -11,16 +14,22 @@ brew "starship"
 brew "zsh-autosuggestions"
 
 # Development essentials
+brew "ariga/tap/atlas"
 brew "btop"
 brew "fd"
 brew "gh"
 brew "git"
 brew "git-lfs"
+brew "withgraphite/tap/graphite"
 brew "jq"
 brew "lazygit"
 brew "neovim"
+brew "newman"
+brew "pnpm"
+brew "poppler"
 brew "ripgrep"
 brew "tree-sitter-cli"
+brew "usage"
 brew "uv"
 
 # Coding harnesses and terminal workflow
@@ -33,7 +42,9 @@ cask "1password-cli"
 cask "claude-code"
 cask "codex"
 cask "font-jetbrains-mono"
+cask "gcloud-cli"
 cask "ghostty"
+cask "opensuperwhisper"
 
 {{- if eq .role "work" }}
 

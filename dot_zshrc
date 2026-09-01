@@ -65,3 +65,7 @@ alias v=nvim
 alias ll='ls -lah'
 
 [[ -r $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+
+# SDKMAN rewrites PATH, so its initialisation must stay last in this file.
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
