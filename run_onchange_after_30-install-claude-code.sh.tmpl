@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+# The native build tracks the latest channel and updates itself, so this only
+# has to bootstrap a machine that has no claude on PATH yet.
+PATH="$HOME/.local/bin:$PATH"
+export PATH
+
+if command -v claude >/dev/null 2>&1; then
+	exit 0
+fi
+
+curl -fsSL https://claude.ai/install.sh | bash -s latest
