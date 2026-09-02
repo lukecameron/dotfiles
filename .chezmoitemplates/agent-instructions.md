@@ -14,4 +14,6 @@ For long-running commands and external processes, keep progress observable and p
 {{- if eq .machineName "slate-pro" }}
 
 Keep pull requests in draft if they contain any public-facing documentation or copy that needs approving. The team is sensitive to noticeable LLM-isms in public-facing text, so have me proofread that copy before marking the PR ready for review or proceeding automatically.
+
+When linking a pull request in the slate-technologies/slate repository, prefer its Graphite URL, `https://app.graphite.com/github/pr/slate-technologies/slate/<number>`, over the GitHub URL.
 {{- end }}
