@@ -8,4 +8,10 @@ When end-to-end testing a product, be picky about the UI you see and be obsessed
 
 Apply that same high standard to engineering excellence: lint, test failures, and test flakiness. If you see one, even if it is not caused by what you are working on right now, still get it fixed.
 
+When referring to a pull request, issue, or ticket, never give the bare number alone. Always follow it with a short description of what it is, for example `#7123 (retry failed webhook deliveries)`, so the reader can keep track when several are being discussed at once.
+
 For long-running commands and external processes, keep progress observable and persist intermediate results often enough that an interruption loses minutes, not hours. Track the exact process or session; do not infer completion from broad process-name matching.
+{{- if eq .machineName "slate-pro" }}
+
+Keep pull requests in draft if they contain any public-facing documentation or copy that needs approving. The team is sensitive to noticeable LLM-isms in public-facing text, so have me proofread that copy before marking the PR ready for review or proceeding automatically.
+{{- end }}
