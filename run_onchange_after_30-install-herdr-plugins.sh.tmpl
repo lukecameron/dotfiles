@@ -1,21 +1,14 @@
 #!/bin/sh
 set -eu
 
-# Smart Rename plugin: iurysza/herdr-tab-smart-rename@a580a9ef248357ea9d85cf0f2131acb2e3fae240
+# Auto Title plugin: kryptamine/herdr-auto-title@4d4554fb9706a29032cb2082be32f2061b96f2c6 (v0.3.3)
+# Herdr builds it from source with Go, which mise installs.
 
-plugin_ref=a580a9ef248357ea9d85cf0f2131acb2e3fae240
+plugin_ref=4d4554fb9706a29032cb2082be32f2061b96f2c6
 config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
 plugins_json="$config_home/herdr/plugins.json"
 
 if [ "{{ .chezmoi.os }}" != "darwin" ]; then
-	exit 0
-fi
-
-# Avoid contacting a running Herdr server when the requested immutable revision
-# is already installed. This also makes upgrades from older server protocols safe.
-if [ -r "$plugins_json" ] && jq -e --arg ref "$plugin_ref" \
-	'any(.[]?; .source.owner == "iurysza" and .source.repo == "herdr-tab-smart-rename" and .source.resolved_commit == $ref)' \
-	"$plugins_json" >/dev/null 2>&1; then
 	exit 0
 fi
 
@@ -37,7 +30,26 @@ else
 	exit 1
 fi
 
+# Herdr's Claude Code hook tells Herdr which session each pane holds, so Auto
+# Title can name a tab even before Claude has set a terminal title. Idempotent.
+"$herdr" integration install claude
+
+# Smart Rename was replaced by Auto Title; remove it where it is still installed.
+if [ -r "$plugins_json" ] && jq -e 'any(.[]?; .plugin_id == "tab-smart-rename")' "$plugins_json" >/dev/null 2>&1; then
+	yes | "$herdr" plugin uninstall tab-smart-rename
+fi
+
+# Avoid contacting a running Herdr server when the requested immutable revision
+# is already installed.
+if [ -r "$plugins_json" ] && jq -e --arg ref "$plugin_ref" \
+	'any(.[]?; .source.owner == "kryptamine" and .source.repo == "herdr-auto-title" and .source.resolved_commit == $ref)' \
+	"$plugins_json" >/dev/null 2>&1; then
+	exit 0
+fi
+
 "$mise" exec -- "$herdr" plugin install \
-	iurysza/herdr-tab-smart-rename \
+	kryptamine/herdr-auto-title \
 	--ref "$plugin_ref" \
 	--yes
+
+echo "Auto Title starts with the Herdr server; run 'herdr server stop' and reopen herdr when convenient." >&2
