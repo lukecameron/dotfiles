@@ -8,8 +8,8 @@ fi
 
 printf '%s\n' "$input" | jq '
   .theme = "light"
-  | .defaultProvider = "openai-codex"
-  | .defaultModel = "gpt-5.5"
+  | .defaultProvider //= "openai-codex"
+  | .defaultModel //= "gpt-5.5"
   | .defaultThinkingLevel = "medium"
   | .hideThinkingBlock = true
   | .quietStartup = true
