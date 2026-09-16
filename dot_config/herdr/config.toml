@@ -6,6 +6,7 @@ delivery = "herdr"
 show_agent_labels_on_pane_borders = true
 agent_panel_sort = "spaces"
 
+status_indicators = "symbols"
 [experimental]
 # Experimental local Kitty graphics rendering for attached clients.
 kitty_graphics = true
