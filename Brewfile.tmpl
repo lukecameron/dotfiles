@@ -1,6 +1,7 @@
 # Homebrew owns operating-system packages. This file is additive: setup never
 # removes packages that are not listed here.
 
+tap "agent-ecosystem/tap", trusted: true
 tap "ariga/tap"
 tap "rjyo/moshi", trusted: true
 tap "withgraphite/tap"
@@ -37,6 +38,7 @@ brew "mosh"
 brew "rjyo/moshi/moshi-hook", restart_service: true
 brew "opencode"
 brew "herdr"
+brew "agent-ecosystem/tap/agentminutes"
 brew "bun"
 cask "1password-cli"
 cask "codex"
