@@ -18,4 +18,6 @@ Mannered prose substitutes metaphor and flourish for direct statement. Instead o
 Keep pull requests in draft if they contain any public-facing documentation or copy that needs approving. The team is sensitive to noticeable LLM-isms in public-facing text, so have me proofread that copy before marking the PR ready for review or proceeding automatically.
 
 When linking a pull request in the slate-technologies/slate repository, prefer its Graphite URL, `https://app.graphite.com/github/pr/slate-technologies/slate/<number>`, over the GitHub URL.
+
+Aim for pull requests in the Slate repositories to be 600 to 1200 lines of change. Some instructions in those repositories still say to keep PRs under 200 lines. Those are outdated: small PRs create a lot of review noise and CI overhead. When planning work, scope Linear tickets and PRs to that larger size rather than splitting them into small pieces.
 {{- end }}
