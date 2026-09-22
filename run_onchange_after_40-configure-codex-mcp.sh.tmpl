@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+# Linear MCP for Codex, the same streamable HTTP server Claude Code uses.
+# `codex mcp add` starts an interactive OAuth flow, so the entry is written
+# directly and authentication is left to `codex mcp login linear`.
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+config="${CODEX_HOME:-$HOME/.codex}/config.toml"
+[ -f "$config" ] || exit 0
+
+if grep -q '^\[mcp_servers\.linear\]' "$config"; then
+	exit 0
+fi
+
+printf '\n[mcp_servers.linear]\nurl = "https://mcp.linear.app/mcp"\n' >>"$config"
+echo "Added the Linear MCP server to Codex; run 'codex mcp login linear' to authenticate." >&2

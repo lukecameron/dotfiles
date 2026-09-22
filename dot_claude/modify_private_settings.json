@@ -6,4 +6,13 @@ if [ -z "$input" ]; then
 	input='{}'
 fi
 
-printf '%s\n' "$input" | jq '.skipDangerousModePermissionPrompt = true'
+# Keys this repo owns in ~/.claude/settings.json. Everything else in the file
+# is left to Claude Code and the tools that write it.
+printf '%s\n' "$input" | jq '
+	.skipDangerousModePermissionPrompt = true
+	| .statusLine = {
+		type: "command",
+		command: "~/.claude/statusline.sh",
+		refreshInterval: 60
+	}
+'

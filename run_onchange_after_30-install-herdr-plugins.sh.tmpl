@@ -1,10 +1,13 @@
 #!/bin/sh
 set -eu
 
-# Auto Title plugin: kryptamine/herdr-auto-title@4d4554fb9706a29032cb2082be32f2061b96f2c6 (v0.3.3)
-# Herdr builds it from source with Go, which mise installs.
+# Herdr plugins, pinned to immutable revisions. Herdr builds both from source
+# with Go, which mise installs.
+#   Auto Title: kryptamine/herdr-auto-title@4d4554fb9706a29032cb2082be32f2061b96f2c6 (v0.3.3)
+#   Spaces:     lukecameron/herdr-spaces@efcc72c6aa1f0cdef831442c6a3a58802188462f (v0.2.0)
 
-plugin_ref=4d4554fb9706a29032cb2082be32f2061b96f2c6
+auto_title_ref=4d4554fb9706a29032cb2082be32f2061b96f2c6
+spaces_ref=efcc72c6aa1f0cdef831442c6a3a58802188462f
 config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
 plugins_json="$config_home/herdr/plugins.json"
 
@@ -39,17 +42,29 @@ if [ -r "$plugins_json" ] && jq -e 'any(.[]?; .plugin_id == "tab-smart-rename")'
 	yes | "$herdr" plugin uninstall tab-smart-rename
 fi
 
-# Avoid contacting a running Herdr server when the requested immutable revision
-# is already installed.
-if [ -r "$plugins_json" ] && jq -e --arg ref "$plugin_ref" \
-	'any(.[]?; .source.owner == "kryptamine" and .source.repo == "herdr-auto-title" and .source.resolved_commit == $ref)' \
-	"$plugins_json" >/dev/null 2>&1; then
-	exit 0
-fi
+# install_plugin OWNER REPO REF: install a GitHub plugin unless that exact
+# revision is already registered, which avoids contacting a running server.
+install_plugin() {
+	owner=$1
+	repo=$2
+	ref=$3
+	if [ -r "$plugins_json" ] && jq -e --arg owner "$owner" --arg repo "$repo" --arg ref "$ref" \
+		'any(.[]?; .source.owner == $owner and .source.repo == $repo and .source.resolved_commit == $ref)' \
+		"$plugins_json" >/dev/null 2>&1; then
+		return 0
+	fi
+	"$mise" exec -- "$herdr" plugin install "$owner/$repo" --ref "$ref" --yes
+	echo "$repo starts with the Herdr server; run 'herdr server stop' and reopen herdr when convenient." >&2
+}
 
-"$mise" exec -- "$herdr" plugin install \
-	kryptamine/herdr-auto-title \
-	--ref "$plugin_ref" \
-	--yes
+install_plugin kryptamine herdr-auto-title "$auto_title_ref"
+install_plugin lukecameron herdr-spaces "$spaces_ref"
 
-echo "Auto Title starts with the Herdr server; run 'herdr server stop' and reopen herdr when convenient." >&2
+# The Spaces plugin counts Claude Code subagents through a hook it installs
+# into ~/.claude. Idempotent; the binary is wherever Herdr checked the plugin out.
+for spaces_bin in "$config_home"/herdr/plugins/github/lukecameron.spaces-*/herdr-spaces; do
+	if [ -x "$spaces_bin" ]; then
+		HERDR_PLUGIN_ROOT=$(dirname "$spaces_bin") "$spaces_bin" install-claude-hook
+		break
+	fi
+done
