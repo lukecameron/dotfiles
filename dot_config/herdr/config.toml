@@ -6,7 +6,7 @@ delivery = "herdr"
 show_agent_labels_on_pane_borders = true
 agent_panel_sort = "spaces"
 
-status_indicators = "symbols"
+status_indicators = "dots"
 
 # Agent counts reported by the Spaces plugin (lukecameron/herdr-spaces).
 [ui.sidebar.spaces]
@@ -35,3 +35,7 @@ navigate_workspace_up = ["up", "k"]
 navigate_workspace_down = ["down", "j"]
 navigate_pane_up = ["shift+k"]
 navigate_pane_down = ["shift+j"]
+# One-step workspace cycling in sidebar order, wrapping at the ends:
+# tmux-style prefix+( and prefix+), or ctrl+alt+k/j with no prefix.
+previous_workspace = ["prefix+(", "ctrl+alt+k"]
+next_workspace = ["prefix+)", "ctrl+alt+j"]
