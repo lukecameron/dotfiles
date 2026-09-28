@@ -11,3 +11,10 @@ elif [[ -d /usr/local/Homebrew/bin ]]; then
 fi
 
 export NO_MISTAKES_TELEMETRY=0
+
+# Agent browsers launched by chrome-devtools-axi run in Chrome Canary. A
+# headless /Applications/Google Chrome.app left behind by an agent takes over
+# the Chrome Dock icon, which then activates a process with no windows.
+if [[ $OSTYPE == darwin* ]]; then
+  export CHROME_DEVTOOLS_AXI_CHANNEL=canary
+fi

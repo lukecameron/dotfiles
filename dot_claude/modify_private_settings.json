@@ -15,4 +15,16 @@ printf '%s\n' "$input" | jq '
 		command: "~/.claude/statusline.sh",
 		refreshInterval: 60
 	}
+	| .hooks.SessionEnd = (
+		[(.hooks.SessionEnd // [])[]
+			| select(any(.hooks[]?; .command == "~/.claude/hooks/stop-chrome-devtools-axi.sh") | not)]
+		+ [{
+			matcher: "",
+			hooks: [{
+				type: "command",
+				command: "~/.claude/hooks/stop-chrome-devtools-axi.sh",
+				timeout: 10
+			}]
+		}]
+	)
 '
