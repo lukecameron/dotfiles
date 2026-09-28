@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Split Herdr panes into tabs while the terminal is narrow.
+
+Herdr's mobile view keeps side-by-side panes side by side, so a phone shows
+two unreadable half-width panes. While the client in front is narrow, this
+moves the right-hand pane of every two-pane tab into a tab of its own; once a
+wide client is back in front, it moves each pane back beside its partner at
+the original split ratio. Herdr has no resize event, so the width is polled.
+
+Pane processes keep running through both moves. Only tabs of exactly two
+side-by-side panes are touched, and a pane is only moved back when both tabs
+are still as this script left them.
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+
+NARROW = int(os.environ.get("HERDR_NARROW_TABS_NARROW", "80"))
+WIDE = int(os.environ.get("HERDR_NARROW_TABS_WIDE", "100"))
+POLL_SECONDS = 1.0
+IDLE_SECONDS = 5.0
+STATE_FILE = os.path.join(
+    os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state")),
+    "herdr-narrow-tabs.json",
+)
+
+
+def log(message):
+    print(time.strftime("%Y-%m-%d %H:%M:%S"), message, file=sys.stderr, flush=True)
+
+
+def herdr(*args):
+    result = subprocess.run(
+        ["herdr", *args], capture_output=True, text=True, timeout=10
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"herdr {' '.join(args)}: {result.stderr.strip()}")
+    return json.loads(result.stdout)["result"]
+
+
+def load_state():
+    try:
+        with open(STATE_FILE) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return []
+
+
+def save_state(moved):
+    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+    tmp = STATE_FILE + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(moved, f, indent=2)
+    os.replace(tmp, STATE_FILE)
+
+
+def collapse(snapshot, moved):
+    panes = {p["pane_id"]: p for p in snapshot["panes"]}
+    tracked = {m["pane"] for m in moved}
+    for layout in snapshot["layouts"]:
+        splits = layout["splits"]
+        if len(layout["panes"]) != 2 or len(splits) != 1:
+            continue
+        if splits[0]["direction"] != "right":
+            continue
+        left, right = sorted(layout["panes"], key=lambda p: p["rect"]["x"])
+        if right["pane_id"] in tracked or left["pane_id"] in tracked:
+            continue
+        if layout["zoomed"]:
+            herdr("pane", "zoom", left["pane_id"], "--off")
+        pane = panes.get(right["pane_id"], {})
+        label = pane.get("terminal_title_stripped") or pane.get("agent")
+        args = ["pane", "move", right["pane_id"], "--new-tab"]
+        args += ["--tab-label", label] if label else []
+        args += ["--focus" if right["focused"] else "--no-focus"]
+        result = herdr(*args)["move_result"]
+        moved.append(
+            {
+                "pane": right["pane_id"],
+                "tab": result["created_tab"]["tab_id"],
+                "home_tab": layout["tab_id"],
+                "partner": left["pane_id"],
+                "ratio": splits[0]["ratio"],
+            }
+        )
+        save_state(moved)
+        log(f"moved {right['pane_id']} out of {layout['tab_id']}")
+
+
+def restore(snapshot, moved):
+    layouts = {l["tab_id"]: l for l in snapshot["layouts"]}
+    focused = snapshot.get("focused_pane_id")
+    for entry in list(moved):
+        tab = layouts.get(entry["tab"])
+        home = layouts.get(entry["home_tab"])
+        intact = (
+            tab is not None
+            and home is not None
+            and [p["pane_id"] for p in tab["panes"]] == [entry["pane"]]
+            and [p["pane_id"] for p in home["panes"]] == [entry["partner"]]
+            and not home["zoomed"]
+        )
+        if intact:
+            herdr(
+                "pane", "move", entry["pane"],
+                "--tab", entry["home_tab"],
+                "--split", "right",
+                "--target-pane", entry["partner"],
+                "--ratio", str(entry["ratio"]),
+                "--focus" if focused == entry["pane"] else "--no-focus",
+            )
+            log(f"moved {entry['pane']} back into {entry['home_tab']}")
+        else:
+            log(f"left {entry['pane']} where it is: its tabs changed")
+        moved.remove(entry)
+        save_state(moved)
+
+
+def front_width(snapshot):
+    focused_tab = snapshot.get("focused_tab_id")
+    for layout in snapshot["layouts"]:
+        if layout["tab_id"] == focused_tab:
+            return layout["area"]["width"]
+    return None
+
+
+def main():
+    moved = load_state()
+    while True:
+        try:
+            snapshot = herdr("api", "snapshot")["snapshot"]
+        except Exception:
+            time.sleep(IDLE_SECONDS)
+            continue
+        try:
+            width = front_width(snapshot)
+            if width is not None and width <= NARROW:
+                collapse(snapshot, moved)
+            elif width is not None and width >= WIDE and moved:
+                restore(snapshot, moved)
+        except Exception as error:
+            log(f"error: {error}")
+        time.sleep(POLL_SECONDS)
+
+
+if __name__ == "__main__":
+    main()

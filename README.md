@@ -36,6 +36,8 @@ Bun is installed by Homebrew for Herdr plugins so long-lived Herdr servers have 
 
 The Herdr Auto Title plugin names tabs after the Claude Code session title in each one. It is pinned to a known commit, built from source with the Go toolchain mise installs, and installed automatically after Herdr and mise tools are available, together with Herdr's Claude Code integration hook. Herdr only starts plugins when its server starts, so run `herdr server stop` and reopen Herdr after a fresh install.
 
+Herdr's mobile view keeps split panes side by side, which leaves two unreadable half-width panes on a phone. The `herdr-narrow-tabs` launchd agent watches the width of the client in front. While it is 80 columns or narrower, the agent moves the right-hand pane of every two-pane tab into a tab of its own, which the mobile switcher lists under tabs. At 100 columns or wider it moves each pane back at its original split ratio. It logs to `~/Library/Logs/herdr-narrow-tabs.log`.
+
 Pi's global settings are merged into its existing file so authentication, sessions, trust decisions, and caches stay machine-local. Existing provider and model selections are preserved; defaults are supplied only when missing. The managed settings keep startup quiet, deliver queued steering and follow-ups together, and pin `pi-web-access` for web research. Pi invokes npm through mise, and its terminal title shows the machine short name plus the current session or directory while it works.
 
 Shared agent guidance is rendered for each supported harness. Reusable cross-agent workflows live in `~/.agents/skills`; this setup includes evidence-backed change review and preregistered evaluation skills.

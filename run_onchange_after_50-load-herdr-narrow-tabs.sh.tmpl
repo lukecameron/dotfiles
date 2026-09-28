@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+# Restart the agent whenever the script or its plist changes.
+# herdr-narrow-tabs: {{ include "dot_local/bin/executable_herdr-narrow-tabs" | sha256sum }}
+# plist: {{ include "private_Library/LaunchAgents/com.lukecameron.herdr-narrow-tabs.plist.tmpl" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+label=com.lukecameron.herdr-narrow-tabs
+plist="$HOME/Library/LaunchAgents/$label.plist"
+domain="gui/$(id -u)"
+
+launchctl bootout "$domain/$label" 2>/dev/null || true
+launchctl bootstrap "$domain" "$plist"
