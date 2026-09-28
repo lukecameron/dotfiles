@@ -21,5 +21,5 @@ Keep pull requests in draft if they contain any public-facing documentation or c
 
 When linking a pull request in the slate-technologies/slate repository, prefer its Graphite URL, `https://app.graphite.com/github/pr/slate-technologies/slate/<number>`, over the GitHub URL.
 
-Pull requests in the Slate repositories are not limited to 200 lines. Some instructions in those repositories still say to keep PRs under that size, but they are outdated: splitting work that finely creates a lot of review noise and CI overhead. When breaking up a large piece of work into Linear tickets and PRs, 600 to 1200 lines of change per PR is ideal. Smaller ad hoc changes can be smaller.
+Pull requests in the Slate repositories are not limited to 200 lines. Some instructions in those repositories still say to keep PRs under that size, but they are outdated: splitting work that finely creates a lot of review noise and CI overhead. When breaking up a large piece of work into Linear tickets and PRs, 600 to 2000 lines of change per PR is ideal. Smaller ad hoc changes can be smaller.
 {{- end }}
