@@ -4,6 +4,7 @@ bootstrap.sh
 Brewfile
 chezmoistate.boltdb
 .config/nvim/lazyvim.json
+claude-mods
 {{- if ne .chezmoi.os "darwin" }}
 Library
 .local/bin/herdr-narrow-tabs

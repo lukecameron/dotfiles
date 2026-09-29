@@ -1,0 +1,4 @@
+{
+  "description": "/pacman, its control pane, the frame clock, and the transcript rows it draws the board over",
+  "modules": ["./register.tsx"]
+}

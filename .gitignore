@@ -1,3 +1,4 @@
 .DS_Store
 chezmoistate.boltdb
 nvim.log
+claude-mods/*/.claude-plugin/types/

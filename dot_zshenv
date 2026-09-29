@@ -12,6 +12,10 @@ fi
 
 export NO_MISTAKES_TELEMETRY=0
 
+# Claude Code loads mods (function-hook plugins such as claude-mods/pacman)
+# only with this early-access flag.
+export CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1
+
 # Agent browsers launched by chrome-devtools-axi run in Chrome Canary. A
 # headless /Applications/Google Chrome.app left behind by an agent takes over
 # the Chrome Dock icon, which then activates a process with no windows.

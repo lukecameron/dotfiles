@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+# Installs the Claude Code mods in claude-mods/ from this repository as a
+# local marketplace. Claude Code copies an installed plugin into its cache, so
+# a change to any mod file reinstalls them.
+# mods: {{ output "sh" "-c" (printf "cd %s/claude-mods && find . -type f -not -path '*/.claude-plugin/types/*' | LC_ALL=C sort | xargs shasum" (quote .chezmoi.sourceDir)) | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+PATH="$HOME/.local/bin:$PATH"
+export PATH CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1
+
+claude plugin marketplace add {{ joinPath .chezmoi.sourceDir "claude-mods" | quote }}
+claude plugin marketplace update luke-mods
+for plugin in pacman; do
+	claude plugin uninstall "$plugin@luke-mods" >/dev/null 2>&1 || true
+	claude plugin install "$plugin@luke-mods"
+done

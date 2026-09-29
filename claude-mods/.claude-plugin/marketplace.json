@@ -1,0 +1,12 @@
+{
+  "name": "luke-mods",
+  "owner": { "name": "Luke Cameron" },
+  "metadata": { "description": "Claude Code mods from lukecameron/dotfiles" },
+  "plugins": [
+    {
+      "name": "pacman",
+      "source": "./pacman",
+      "description": "Pac-Man played over the conversation on screen; Esc puts it back"
+    }
+  ]
+}
