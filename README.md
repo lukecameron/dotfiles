@@ -44,6 +44,10 @@ Shared agent guidance is rendered for each supported harness. Reusable cross-age
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 
+## Claude Code plugins
+
+Work machines get the Datadog plugin from the official marketplace. Its Datadog site is set per machine: run `/datadog:ddsetup` in Claude Code once after installing.
+
 ## Claude Code mods
 
 `claude-mods/` is a local plugin marketplace of Claude Code mods: plugins built on function hooks, which Claude Code loads only with the early-access `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` that `~/.zshenv` sets. `chezmoi apply` installs them, and reinstalls them after any change, because Claude Code runs a cached copy.

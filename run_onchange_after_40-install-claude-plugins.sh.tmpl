@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+# Claude Code plugins from the official marketplace. Installing one that is
+# already installed changes nothing, so this only fills in missing plugins.
+# Each plugin's own setup (such as the Datadog site) stays machine-local.
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+PATH="$HOME/.local/bin:$PATH"
+export PATH
+
+{{- if eq .role "work" }}
+
+claude plugin install datadog@claude-plugins-official
+{{- end }}
