@@ -46,7 +46,7 @@ LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvi
 
 ## Claude Code plugins
 
-Work machines get the Datadog plugin from the official marketplace. Its Datadog site is set per machine: run `/datadog:ddsetup` in Claude Code once after installing.
+Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.
 
 ## Claude Code mods
 

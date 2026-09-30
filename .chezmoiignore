@@ -9,3 +9,6 @@ claude-mods
 Library
 .local/bin/herdr-narrow-tabs
 {{- end }}
+{{- if ne .role "work" }}
+.claude/plugins/data/datadog-claude-plugins-official
+{{- end }}

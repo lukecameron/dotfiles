@@ -3,7 +3,8 @@ set -eu
 
 # Claude Code plugins from the official marketplace. Installing one that is
 # already installed changes nothing, so this only fills in missing plugins.
-# Each plugin's own setup (such as the Datadog site) stays machine-local.
+# The Datadog site the dotfiles keep in the plugin's data directory is applied
+# to a fresh install, as the plugin's own /datadog:ddsetup would apply it.
 
 if [ "{{ .chezmoi.os }}" != "darwin" ]; then
 	exit 0
@@ -15,4 +16,10 @@ export PATH
 {{- if eq .role "work" }}
 
 claude plugin install datadog@claude-plugins-official
+
+# datadog-domain: {{ include "dot_claude/plugins/data/datadog-claude-plugins-official/domain" | sha256sum }}
+domain=$(cat "$HOME/.claude/plugins/data/datadog-claude-plugins-official/domain")
+registration=$(jq -r '.plugins["datadog@claude-plugins-official"][0].installPath' \
+	"$HOME/.claude/plugins/installed_plugins.json")/.dd_claude-code_mcp.json
+sed -i '' "s/\${DD_MCP_DOMAIN:-[^}]*}/\${DD_MCP_DOMAIN:-$domain}/" "$registration"
 {{- end }}
