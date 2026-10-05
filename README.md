@@ -30,11 +30,11 @@ chezmoi update
 
 Homebrew setup installs missing packages but deliberately does not remove anything else. Run `brew upgrade` when you want to update Homebrew-managed tools.
 
-Node's latest LTS release, Pi, Treehouse, and the AXI command-line tools are installed by mise. No Mistakes uses its official user-local layout so its self-updater and launchd daemon share a stable executable path. Python runtimes and environments are installed on demand by uv.
+Node's latest LTS release, Pi, Treehouse, and the AXI command-line tools are installed by mise. They track release channels rather than fixed versions, so any change to `dot_config/mise/config.toml` upgrades all of them to the newest release mise considers eligible; bump its Pi marker to trigger that. No Mistakes uses its official user-local layout so its self-updater and launchd daemon share a stable executable path. Python runtimes and environments are installed on demand by uv.
 
 Bun is installed by Homebrew for Herdr plugins so long-lived Herdr servers have a stable runtime path. The managed `rjyo/herdr-window-title-sync` plugin publishes the focused Herdr workspace, tab, and agent session through the outer terminal title so Moshi can identify resumed sessions; its local-session fallback can include recent Codex or Claude prompt text in that title.
 
-The Herdr Auto Title plugin names tabs after the Claude Code session title in each one. It is pinned to a known commit, built from source with the Go toolchain mise installs, and installed automatically after Herdr and mise tools are available, together with Herdr's Claude Code integration hook. Herdr only starts plugins when its server starts, so run `herdr server stop` and reopen Herdr after a fresh install.
+The Herdr Auto Title plugin names tabs and panes after the Claude Code session title in each one. It is pinned to a known commit, built from source with the Go toolchain mise installs, and installed automatically after Herdr and mise tools are available, together with Herdr's Claude Code integration hook. Herdr only starts plugins when its server starts, so run `herdr server stop` and reopen Herdr after a fresh install.
 
 Herdr's mobile view keeps split panes side by side, which leaves two unreadable half-width panes on a phone. The `herdr-narrow-tabs` launchd agent watches the width of the client in front. While it is 80 columns or narrower, the agent moves the right-hand pane of every two-pane tab into a tab of its own, which the mobile switcher lists under tabs. At 100 columns or wider it moves each pane back at its original split ratio. It logs to `~/Library/Logs/herdr-narrow-tabs.log`.
 

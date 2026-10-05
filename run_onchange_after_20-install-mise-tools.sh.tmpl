@@ -18,3 +18,6 @@ fi
 
 "$mise" trust --quiet "$HOME/.config/mise/config.toml"
 "$mise" install
+# `mise install` leaves an installed tool alone, so tools tracking a channel
+# such as "latest" or "lts" only move when they are upgraded.
+"$mise" upgrade

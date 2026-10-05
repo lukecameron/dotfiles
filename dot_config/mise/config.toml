@@ -2,8 +2,9 @@
 node = "lts"
 # Herdr builds the Auto Title plugin from source at install time.
 go = "latest"
+# Changing this file upgrades every tool below to its newest eligible release.
 # Bump this marker to roll the current Pi release across managed machines.
-# Pi refresh: 0.84.1
+# Pi refresh: 1.0.2
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "github:kunchenguid/treehouse" = "latest"
 "npm:gh-axi" = "latest"
