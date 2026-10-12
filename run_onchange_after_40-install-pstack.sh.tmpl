@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+
+# pstack (Cursor's agent skills, via the harness-neutral backnotprop/pstack
+# mirror) for Claude Code, Codex, Pi and OpenCode at user level. The skills
+# CLI puts every skill in ~/.agents/skills, which Codex, Pi and OpenCode read,
+# and links each into ~/.claude/skills. Claude Code also gets pstack's two
+# subagents; the other harnesses spawn a general subagent with the same prompt.
+# Between bumps, `npx skills update -g -y` takes the mirror's latest.
+# Bump this marker to reinstall from the mirror's main branch.
+# pstack refresh: 0.15.20
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+if [ -x /opt/homebrew/bin/mise ]; then
+	mise=/opt/homebrew/bin/mise
+else
+	mise=/usr/local/bin/mise
+fi
+
+export DISABLE_TELEMETRY=1 DO_NOT_TRACK=1
+"$mise" exec node@lts -- npx -y skills@latest add backnotprop/pstack \
+	--global --agent claude-code --agent codex --agent pi --agent opencode --skill '*' --yes
+
+src=$(mktemp -d)
+trap 'rm -rf "$src"' EXIT HUP INT TERM
+git clone --quiet --depth 1 https://github.com/backnotprop/pstack.git "$src"
+mkdir -p "$HOME/.claude/agents"
+cp "$src/agents/poteto-agent.md" "$src/agents/comment-sicko.md" "$HOME/.claude/agents/"

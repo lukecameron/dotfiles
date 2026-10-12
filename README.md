@@ -44,6 +44,10 @@ Shared agent guidance is rendered for each supported harness. Reusable cross-age
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 
+## pstack
+
+[pstack](https://github.com/cursor/plugins/tree/main/pstack), Cursor's rigorous-engineering agent skills (`/poteto-mode`, `/how`, `/why`, `/unslop` and the `principle-*` skills), is installed at user level for Claude Code, Codex, Pi and OpenCode from the [backnotprop/pstack](https://github.com/backnotprop/pstack) mirror, which rewrites its Cursor-only instructions for other harnesses. Run `/setup-pstack` once per machine to pick its models. `npx skills update -g -y` takes the mirror's latest; bumping the refresh marker in `run_onchange_after_40-install-pstack.sh.tmpl` reinstalls everywhere.
+
 ## Claude Code plugins
 
 Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.
