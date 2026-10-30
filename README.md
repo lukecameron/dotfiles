@@ -32,7 +32,7 @@ Homebrew setup installs missing packages but deliberately does not remove anythi
 
 Node's latest LTS release, Pi, Treehouse, and the AXI command-line tools are installed by mise. They track release channels rather than fixed versions, so any change to `dot_config/mise/config.toml` upgrades all of them to the newest release mise considers eligible; bump its Pi marker to trigger that. No Mistakes uses its official user-local layout so its self-updater and launchd daemon share a stable executable path. Python runtimes and environments are installed on demand by uv.
 
-Bun is installed by Homebrew for Herdr plugins so long-lived Herdr servers have a stable runtime path. The managed `rjyo/herdr-window-title-sync` plugin publishes the focused Herdr workspace, tab, and agent session through the outer terminal title so Moshi can identify resumed sessions; its local-session fallback can include recent Codex or Claude prompt text in that title.
+Bun is installed by Homebrew for Herdr plugins so long-lived Herdr servers have a stable runtime path. The managed `rjyo/herdr-window-title-sync` plugin publishes the focused Herdr workspace, tab, and agent session through the outer terminal title; its local-session fallback can include recent Codex or Claude prompt text in that title.
 
 The Herdr Auto Title plugin names tabs and panes after the Claude Code session title in each one. It is pinned to a known commit, built from source with the Go toolchain mise installs, and installed automatically after Herdr and mise tools are available, together with Herdr's Claude Code integration hook. Herdr only starts plugins when its server starts, so run `herdr server stop` and reopen Herdr after a fresh install.
 
@@ -76,8 +76,6 @@ mosh luke@machine-name
 ```
 
 The tailnet policy must allow TCP port 22 and UDP ports 60000–61000 from the client to the destination.
-
-`moshi-hook` is installed from the trusted `rjyo/moshi` tap and registered as a per-user service. Its pairing token and generated agent-hook configuration remain machine-local.
 
 ## Local configuration
 
