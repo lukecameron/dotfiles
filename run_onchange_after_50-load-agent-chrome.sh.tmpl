@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+
+# Restart the agent Chrome whenever its launcher or plist changes. Restarting
+# closes every agent tab; the profile and its sign-ins are kept.
+# agent-chrome: {{ include "dot_local/bin/executable_agent-chrome" | sha256sum }}
+# plist: {{ include "private_Library/LaunchAgents/com.lukecameron.agent-chrome.plist.tmpl" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+label=com.lukecameron.agent-chrome
+plist="$HOME/Library/LaunchAgents/$label.plist"
+domain="gui/$(id -u)"
+
+launchctl bootout "$domain/$label" 2>/dev/null || true
+launchctl bootstrap "$domain" "$plist"

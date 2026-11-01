@@ -23,9 +23,19 @@ export NO_MISTAKES_TELEMETRY=0
 # only with this early-access flag.
 export CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1
 
-# Agent browsers launched by chrome-devtools-axi run in Chrome Canary. A
-# headless /Applications/Google Chrome.app left behind by an agent takes over
-# the Chrome Dock icon, which then activates a process with no windows.
+# Agents browse in one Chrome Canary that the com.lukecameron.agent-chrome
+# LaunchAgent keeps running (see ~/.local/bin/agent-chrome). chrome-devtools-axi
+# and agent-browser attach to its debugging port instead of launching browsers.
+# Each Claude Code session, or supervisor worker, gets its own axi bridge so its
+# selected tab is its own; the SessionEnd hook stops that bridge, and an idle
+# one stops itself after 30 minutes. Pinned agent-browser sessions open a tab of
+# their own instead of taking over the active one. Claude in Chrome stays off:
+# it drives the stable Chrome profile, which is not the agents' browser.
 if [[ $OSTYPE == darwin* ]]; then
-  export CHROME_DEVTOOLS_AXI_CHANNEL=canary
+  export CHROME_DEVTOOLS_AXI_BROWSER_URL=http://127.0.0.1:9223
+  export CHROME_DEVTOOLS_AXI_SESSION=${SUPERVISOR_WORKER:-${CLAUDE_CODE_SESSION_ID:-default}}
+  export CHROME_DEVTOOLS_AXI_IDLE_TIMEOUT_MS=1800000
+  export AGENT_BROWSER_CDP=9223
+  export AGENT_BROWSER_PIN_TAB=1
+  export CLAUDE_CODE_ENABLE_CFC=0
 fi
