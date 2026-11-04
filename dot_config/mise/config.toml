@@ -12,6 +12,7 @@ go = "latest"
 "npm:lavish-axi" = "latest"
 "npm:tasks-axi" = "latest"
 "npm:quota-axi" = "latest"
+"npm:wrangler" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
