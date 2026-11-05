@@ -52,21 +52,6 @@ LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvi
 
 Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.
 
-## Claude Code mods
-
-`claude-mods/` is a local plugin marketplace of Claude Code mods: plugins built on function hooks, which Claude Code loads only with the early-access `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` that `~/.zshenv` sets. `chezmoi apply` installs them, and reinstalls them after any change, because Claude Code runs a cached copy.
-
-- `pacman`: `/pacman` plays Pac-Man over the conversation on screen, even while Claude is working. WASD or hjkl steer, and Escape closes the game and draws the conversation as it was, without interrupting Claude.
-
-Run a mod's tests and type check from its folder:
-
-```sh
-CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 claude plugin test .
-bunx -p typescript tsc -p .
-```
-
-The type check reads `.claude-plugin/types/`, which Claude Code writes for its own version when it loads the mod with `claude --plugin-dir <mod>`.
-
 ## Remote shell
 
 Mosh is installed on every machine and runs over Tailscale. On each destination Mac, enable **System Settings → General → Sharing → Remote Login**, then connect using its Tailscale MagicDNS name:
