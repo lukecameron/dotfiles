@@ -48,6 +48,14 @@ LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvi
 
 [pstack](https://github.com/cursor/plugins/tree/main/pstack), Cursor's rigorous-engineering agent skills (`/poteto-mode`, `/how`, `/why`, `/unslop` and the `principle-*` skills), is installed at user level for Claude Code, Codex, Pi and OpenCode from the [backnotprop/pstack](https://github.com/backnotprop/pstack) mirror, which rewrites its Cursor-only instructions for other harnesses. Run `/setup-pstack` once per machine to pick its models. `npx skills update -g -y` takes the mirror's latest; bumping the refresh marker in `run_onchange_after_40-install-pstack.sh.tmpl` reinstalls everywhere.
 
+## Matt Pocock's skills
+
+[mattpocock/skills](https://github.com/mattpocock/skills) (`/ask-matt` lists them) is installed at user level for Claude Code, Codex and Pi by `run_onchange_after_40-install-mattpocock-skills.sh.tmpl`. Run `/setup-matt-pocock-skills` once per repo before using its issue-tracker flows, such as `/to-spec`, `/to-tickets`, `/triage` and `/wayfinder`.
+
+The script names each skill, so a new upstream skill stays out until it is read and added. It leaves out `tdd` and `teach` (pstack has skills with those names), `code-review` (Claude Code has `/code-review`) and `pr` (it fires on every PR body). `software-factory` is also absent, because the skills CLI cannot parse its frontmatter. As a result, `/implement` and `/implement-spec` run without Matt's `tdd`, and in Claude Code they use its `/code-review` for the review step.
+
+Bumping the refresh marker in the script reinstalls from upstream's main branch. `npx skills update -g -y` also updates these skills, along with pstack.
+
 ## Claude Code plugins
 
 Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.

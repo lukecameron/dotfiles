@@ -1,0 +1,65 @@
+#!/bin/sh
+set -eu
+
+# Matt Pocock's agent skills (mattpocock/skills) for Claude Code, Codex and Pi
+# at user level. The skills CLI puts every skill in ~/.agents/skills, which
+# Codex and Pi read, and links each into ~/.claude/skills.
+#
+# Skills are named one by one, because `--skill '*'` would overwrite these:
+#   tdd, teach    same names as pstack's skills
+#   code-review   same name as Claude Code's /code-review
+#   pr            fires on every PR body, against sl-ship's slate-writing rule
+# software-factory is also absent: the CLI skips it because its upstream
+# frontmatter is invalid YAML.
+#
+# Bump this marker to reinstall these skills from the repository's main branch.
+# Read any new or changed skills first: they are instructions agents will follow.
+# mattpocock/skills refresh: 4ae2317
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+if [ -x /opt/homebrew/bin/mise ]; then
+	mise=/opt/homebrew/bin/mise
+else
+	mise=/usr/local/bin/mise
+fi
+
+export DISABLE_TELEMETRY=1 DO_NOT_TRACK=1
+"$mise" exec node@lts -- npx -y skills@latest add mattpocock/skills \
+	--global --agent claude-code --agent codex --agent pi --yes \
+	--skill ask-matt \
+	--skill chief-of-staff \
+	--skill claude-handoff \
+	--skill codebase-design \
+	--skill diagnosing-bugs \
+	--skill domain-modeling \
+	--skill git-guardrails-claude-code \
+	--skill grill-me \
+	--skill grill-with-docs \
+	--skill grilling \
+	--skill handoff \
+	--skill implement \
+	--skill implement-spec \
+	--skill improve-codebase-architecture \
+	--skill loop-me \
+	--skill migrate-to-shoehorn \
+	--skill prototype \
+	--skill research \
+	--skill retro \
+	--skill scaffold-exercises \
+	--skill setup-matt-pocock-skills \
+	--skill setup-pre-commit \
+	--skill setup-ts-deep-modules \
+	--skill to-questionnaire \
+	--skill to-spec \
+	--skill to-tickets \
+	--skill triage \
+	--skill wait-what \
+	--skill wayfinder \
+	--skill wizard \
+	--skill writing-beats \
+	--skill writing-for-agents \
+	--skill writing-fragments \
+	--skill writing-shape
