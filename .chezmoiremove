@@ -1,0 +1,3 @@
+{{- if eq .chezmoi.os "darwin" }}
+Library/LaunchAgents/com.lukecameron.agent-chrome.plist
+{{- end }}

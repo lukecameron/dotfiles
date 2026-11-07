@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+# Retire the old supervisor so quitting Canary leaves it closed.
+launchctl bootout "gui/$(id -u)/com.lukecameron.agent-chrome" 2>/dev/null || true

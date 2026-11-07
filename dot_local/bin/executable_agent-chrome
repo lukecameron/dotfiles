@@ -1,38 +1,34 @@
 #!/bin/sh
-# Run the one Chrome that every agent on this Mac browses in: Chrome Canary,
-# headed, with remote debugging on 127.0.0.1:9223 and a profile of its own.
-# The com.lukecameron.agent-chrome LaunchAgent runs this and restarts it when
-# Canary exits. Agent tools attach to the port (see ~/.zshenv) and never launch
-# a browser themselves.
-#
-# Chrome refuses remote debugging on a channel's default data directory, so
-# the profile lives in a directory that only this Canary uses. Port 9222 is
-# avoided because Chrome's own chrome://inspect remote debugging listens there.
+# Start the shared agent browser on demand and wait until it accepts connections.
+# macOS owns the process, so it survives the invoking shell and can be quit normally.
 set -eu
 
 data_dir="$HOME/Library/Application Support/agent-chrome"
-canary="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+canary="/Applications/Google Chrome Canary.app"
 
-# A Canary that Chrome relaunched itself (after an update, or chrome://restart)
-# runs outside launchd and holds the profile. Starting a second one would only
-# hand its arguments to the first, which opens a window and exits, and launchd
-# would repeat that every ten seconds. Wait for the running one to exit instead.
-if lock=$(readlink "$data_dir/SingletonLock" 2>/dev/null); then
-	pid=${lock##*-}
-	if ps -o command= -p "$pid" 2>/dev/null | grep -qF -- "--user-data-dir=$data_dir"; then
-		while kill -0 "$pid" 2>/dev/null; do
-			sleep 10
-		done
-		exit 0
-	fi
-fi
+ready() {
+	curl --fail --silent --output /dev/null --connect-timeout 1 --max-time 1 \
+		http://127.0.0.1:9223/json/version
+}
+
+ready && exit 0
 
 # The mock keychain keeps this browser away from the login keychain, as
 # chrome-devtools-axi does for the browsers it launches.
-exec "$canary" \
+open -n -a "$canary" --args \
 	--user-data-dir="$data_dir" \
 	--remote-debugging-port=9223 \
 	--no-first-run \
 	--no-default-browser-check \
 	--use-mock-keychain \
 	--password-store=basic
+
+attempt=0
+while [ "$attempt" -lt 50 ]; do
+	ready && exit 0
+	attempt=$((attempt + 1))
+	sleep 0.2
+done
+
+echo "Agent Chrome did not become ready on 127.0.0.1:9223." >&2
+exit 1

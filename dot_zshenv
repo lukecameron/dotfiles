@@ -19,9 +19,7 @@ unset libpq_bin
 
 export NO_MISTAKES_TELEMETRY=0
 
-# Agents browse in one Chrome Canary that the com.lukecameron.agent-chrome
-# LaunchAgent keeps running (see ~/.local/bin/agent-chrome). chrome-devtools-axi
-# and agent-browser attach to its debugging port instead of launching browsers.
+# Browser commands start the shared Chrome Canary only when needed.
 # Each Claude Code session, or supervisor worker, gets its own axi bridge so its
 # selected tab is its own; the SessionEnd hook stops that bridge, and an idle
 # one stops itself after 30 minutes. Pinned agent-browser sessions open a tab of
@@ -34,4 +32,28 @@ if [[ $OSTYPE == darwin* ]]; then
   export AGENT_BROWSER_CDP=9223
   export AGENT_BROWSER_PIN_TAB=1
   export CLAUDE_CODE_ENABLE_CFC=0
+
+  chrome-devtools-axi() {
+    case ${1:-} in
+      ''|help|--help|-h|--version|stop) ;;
+      *)
+        if [[ " $* " != *" --help "* && " $* " != *" -h "* ]]; then
+          "$HOME/.local/bin/agent-chrome" || return
+        fi
+        ;;
+    esac
+    command chrome-devtools-axi "$@"
+  }
+
+  agent-browser() {
+    case ${1:-} in
+      ''|help|--help|-h|--version|close) ;;
+      *)
+        if [[ " $* " != *" --help "* && " $* " != *" -h "* ]]; then
+          "$HOME/.local/bin/agent-chrome" || return
+        fi
+        ;;
+    esac
+    command agent-browser "$@"
+  }
 fi
