@@ -5,7 +5,7 @@ import sys
 config = sys.stdin.read()
 if not config:
     config = 'model = "gpt-5.6-sol"\nmodel_reasoning_effort = "xhigh"\napproval_policy = "on-request"\nsandbox_mode = "workspace-write"\n'
-status = 'status_line = ["model-with-reasoning", "current-dir", "context-remaining", "five-hour-limit", "weekly-limit"]'
+status = 'status_line = ["model-with-reasoning", "current-dir", "context-used", "context-window-size", "five-hour-limit", "weekly-limit"]'
 section = re.search(r'(?m)^\[tui\][ \t]*(?:\r?\n|$)', config)
 if section:
     following = re.search(r'(?m)^\[', config[section.end():])
