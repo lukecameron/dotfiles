@@ -115,27 +115,32 @@ Administrator preview procedure (run locally as Luke, with `HOME=/home/luke`):
    `config.toml` with `[data]`, `role="personal"`, `machineName="marcus"`.
    Use the checksum-verified official chezmoi binary. Set `review_dir`,
    `reviewed_source` and `chezmoi_binary` to these reviewed paths.
-3. In Bash without loading personal startup files, build the command below.
-   `managed` prints names only; require exactly `.config` and the four files.
-   Do not use verbose/diff output in shared logs: existing shell files can contain
-   secrets. A clean nonverbose dry run is not proof that existing data is preserved.
+3. Run the reviewed helper in Bash without loading personal startup files:
 
 ```bash
-[ "$(id -un)" = luke ] && [ "$HOME" = /home/luke ] || exit 1
-cm=("$chezmoi_binary" --source "$reviewed_source" --destination /home/luke
-    --config "$review_dir/config.toml" --cache "$review_dir/cache"
-    --persistent-state "$review_dir/state.boltdb" --no-tty
-    --error-on-conflict --refresh-externals=never)
-targets=(/home/luke/.zshenv /home/luke/.zprofile /home/luke/.zshrc
-         /home/luke/.config/starship.toml)
-"${cm[@]}" managed
-"${cm[@]}" apply --dry-run --exclude scripts "${targets[@]}"
-# Separate approved step after private conflict/data review:
-# "${cm[@]}" apply --exclude scripts "${targets[@]}"
+bash --noprofile --norc "$reviewed_source/tests/admin-candidates.sh" preview
+# Separate approved step; the helper repeats all metadata checks immediately:
+# bash --noprofile --norc "$reviewed_source/tests/admin-candidates.sh" apply
 ```
 
+Export `review_dir`, `reviewed_source` and `chezmoi_binary` before invoking it.
+The helper checks real directory types, Luke UID/GID 3000, home mode 0750,
+`.config` mode 0700, and root ownership/non-writability of `/home`. It uses
+`lstat` to refuse ANY existing selected target, including regular files,
+directories, and live or dangling symlinks. These checks run immediately before
+both preview and apply, independently of chezmoi's conflict detection.
+`--error-on-conflict` with fresh state DOES NOT protect preexisting unmanaged
+files; a successful dry run is not proof of preservation. There is no override
+in this first-apply procedure. If a target exists, stop for a separate private
+backup, review and merge procedure, even if an earlier inspection found it absent.
+The durable backup must remain available; do not remove a target merely to pass
+this guard. The helper prints names and metadata errors only; avoid verbose/diff
+output in shared logs. Coordinate with Luke and stop concurrent home writers:
+preflight and chezmoi writes are separate operations, not an atomic no-clobber
+transaction. Recheck the reviewed source and binary before either command.
+
 Never add `--force`, `--parent-dirs`, a directory target, `init --apply` or `update`
-to this procedure. Stop for any conflict; merge personal settings deliberately,
+to this procedure. Stop for any existing target or metadata mismatch; merge personal settings deliberately,
 preserving unmanaged `.zprofile.local` and `.zshrc.local`. If `.config` is absent,
 review its creation separately. Existing parent modes must stay unchanged.
 Applying can replace the four selected files, and a later Zsh launch sources
