@@ -24,7 +24,9 @@ with tempfile.TemporaryDirectory(prefix="dotfiles-linux-preview-") as tmp:
     home = root / "home"
     home.mkdir()
     sentinels = {".codex/config.toml": b"# synthetic private state\n",
-                 ".config/nvim/local.lua": b"-- synthetic personal edit\n"}
+                 ".config/nvim/local.lua": b"-- synthetic personal edit\n",
+                 ".local/bin/rex-status": b"# synthetic personal helper\n",
+                 ".config/rex/status.lua": b"-- synthetic personal Rex configuration\n"}
     for name, content in sentinels.items():
         target = home / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -42,6 +44,8 @@ with tempfile.TemporaryDirectory(prefix="dotfiles-linux-preview-") as tmp:
     preview = run("apply", "--dry-run", "--verbose")
     assert "marcus" in preview
     assert "brew bundle" not in preview
+    assert "rex-status" not in preview, "Linux preview attempts Rex file removal"
+    assert "status.lua" not in preview, "Linux preview attempts Rex config removal"
     for name, content in sentinels.items():
         assert (home / name).read_bytes() == content
     assert not (home / ".zshrc").exists(), "Dry run wrote a target"

@@ -31,5 +31,3 @@ Library
 .config/mise
 .config/opencode
 {{- end }}
-
-tests
