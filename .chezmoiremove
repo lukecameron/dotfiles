@@ -1,3 +1,6 @@
 {{- if eq .chezmoi.os "darwin" }}
 Library/LaunchAgents/com.lukecameron.agent-chrome.plist
+Library/LaunchAgents/com.lukecameron.rex-status.plist
 {{- end }}
+.local/bin/rex-status
+.config/rex/status.lua

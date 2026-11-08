@@ -1,0 +1,51 @@
+#!/bin/sh
+set -eu
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+label=com.lukecameron.rex-status
+domain="gui/$(id -u)"
+launchctl bootout "$domain/$label" 2>/dev/null || true
+attempt=0
+while launchctl print "$domain/$label" >/dev/null 2>&1; do
+	attempt=$((attempt + 1))
+	if [ "$attempt" -ge 100 ]; then
+		echo "Timed out waiting for $label to unload" >&2
+		exit 1
+	fi
+	sleep 0.1
+done
+
+# This migration only changes this machine's server, even from a remote shell.
+unset REX_SERVER REX_SESSION REX_BLOCK
+rex=$(command -v rex || true)
+if [ -z "$rex" ]; then
+	for app in /Applications/Rex.app "/Applications/Rex Beta.app" "$HOME/Applications/Rex.app" "$HOME/Applications/Rex Beta.app"; do
+		candidate="$app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex"
+		if [ -x "$candidate" ]; then
+			rex="$candidate"
+			break
+		fi
+	done
+fi
+if [ -z "$rex" ] || ! "$rex" --autostart=false ls --json >/dev/null 2>&1; then
+	exit 0
+fi
+
+"$rex" --autostart=false do - <<'LUA'
+local closed = 0
+for _, session in ipairs(assert(rex.call("session.list")).sessions or {}) do
+    local id = session.session_id
+    assert(rex.call("session.attach", { session_id = id }))
+    local blocks = assert(rex.call("session.list_blocks", { session_id = id })).blocks
+    for _, block in ipairs(blocks or {}) do
+        if block.label == "Rex Status" and block.creator_name == "com.superlogical.terminal" then
+            assert(rex.call("block.close", { session_id = id, block_id = block.block_id }))
+            closed = closed + 1
+        end
+    end
+end
+return { removed_status_panes = closed }
+LUA

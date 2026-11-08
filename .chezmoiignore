@@ -2,6 +2,7 @@ README.md
 AGENTS.md
 bootstrap.sh
 tests
+experiments
 **/__pycache__
 Brewfile
 chezmoistate.boltdb

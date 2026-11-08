@@ -1,9 +1,10 @@
 #!/bin/sh
 set -eu
 
-# rex-status: {{ include "dot_local/bin/executable_rex-status" | sha256sum }}
-# Lua: {{ include "dot_config/rex/status.lua" | sha256sum }}
-# plist: {{ include "private_Library/LaunchAgents/com.lukecameron.rex-status.plist.tmpl" | sha256sum }}
+# Disabled experiment: excluded from normal chezmoi applies.
+# rex-status: {{ include "experiments/rex-status/rex-status" | sha256sum }}
+# Lua: {{ include "experiments/rex-status/status.lua" | sha256sum }}
+# plist: {{ include "experiments/rex-status/launchagent.plist.tmpl" | sha256sum }}
 
 if [ "{{ .chezmoi.os }}" != "darwin" ]; then
 	exit 0

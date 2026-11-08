@@ -7,7 +7,7 @@ import unittest
 
 
 loader = importlib.machinery.SourceFileLoader(
-    "rex_status", str(Path(__file__).resolve().parents[1] / "dot_local/bin/executable_rex-status")
+    "rex_status", str(Path(__file__).resolve().parents[1] / "experiments/rex-status/rex-status")
 )
 spec = importlib.util.spec_from_loader(loader.name, loader)
 status = importlib.util.module_from_spec(spec)
