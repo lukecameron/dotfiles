@@ -15,3 +15,21 @@ Library
 {{- if ne .role "work" }}
 .claude/plugins/data/datadog-claude-plugins-official
 {{- end }}
+
+{{- if eq .chezmoi.os "linux" }}
+# Linux initially owns only the shell and prompt. Never execute installers,
+# mutate agent settings, or reconcile exact_nvim on the resident host.
+[0-9][0-9]-*.sh
+.local
+.agents
+.claude
+.codex
+.pi
+.config/nvim
+.config/ghostty
+.config/herdr
+.config/mise
+.config/opencode
+{{- end }}
+
+tests
