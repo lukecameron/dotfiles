@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Keep a Lua status script connected to Rex, or render its snapshot in a pane."""
+
+import argparse
+import fcntl
+import json
+import os
+from pathlib import Path
+import shutil
+import signal
+import subprocess
+import sys
+import time
+
+
+def find_rex():
+    candidates = [shutil.which("rex")]
+    for root in (Path("/Applications"), Path.home() / "Applications"):
+        for app in ("Rex.app", "Rex Beta.app"):
+            candidates.append(str(root / app / "Contents/Helpers/Rex Server.rex/Contents/MacOS/rex"))
+    return next((path for path in candidates if path and os.access(path, os.X_OK)), None)
+
+
+def countdown(value):
+    from datetime import datetime
+
+    try:
+        seconds = max(0, datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp() - time.time())
+    except (AttributeError, TypeError, ValueError):
+        return ""
+    if seconds >= 86400:
+        return f"{int(seconds // 86400)}d {int(seconds % 86400 // 3600)}h"
+    return f"{int(seconds // 3600)}h {int(seconds % 3600 // 60)}m"
+
+
+def status_lines(snapshot):
+    if time.time() - snapshot.get("updated_at", 0) > 30:
+        return ["Rex status reconnecting…", "Waiting for the status service"]
+    quota = snapshot.get("quota") or {}
+    weekly = next((w for w in quota.get("windows", []) if w.get("id") == "weekly"), {})
+    remaining = weekly.get("percentRemaining")
+    state = quota.get("state", {})
+    fresh = state.get("status") == "fresh" and not state.get("stale")
+    if isinstance(remaining, (int, float)) and fresh and time.time() - snapshot.get("quota_at", 0) < 120:
+        used = max(0, min(100, 100 - remaining))
+        color = "31" if used >= 90 else "33" if used >= 70 else "36"
+        usage = f"Codex weekly  \033[{color}m{used:g}% used\033[0m"
+        reset = countdown(weekly.get("resetsAt"))
+        if reset:
+            usage += f"  ·  resets in {reset}"
+    else:
+        usage = "Codex weekly  unavailable"
+    agents = snapshot.get("agents", {})
+    activity = f"Agents {agents.get('total', 0)}  ·  {agents.get('working', 0)} working"
+    waiting = agents.get("blocked", 0)
+    activity += f"  ·  {waiting} waiting"
+    errors = agents.get("error", 0)
+    if errors:
+        activity += f"  ·  \033[31m{errors} error\033[0m"
+    activity += f"  ·  {agents.get('idle', 0)} idle"
+    if agents.get("unknown"):
+        activity += f"  ·  {agents['unknown']} unknown"
+    activity += f"  ·  {snapshot.get('sessions', 0)} sessions"
+    return [usage, activity]
+
+
+def render(state_dir):
+    import re
+
+    ansi = re.compile(r"\033\[[0-9;]*m")
+    sys.stdout.write("\033[?1049h\033[?25l\033[?7l")
+    try:
+        previous = None
+        while True:
+            try:
+                snapshot = json.loads((state_dir / "snapshot.json").read_text())
+            except (OSError, ValueError):
+                snapshot = {}
+            width, height = shutil.get_terminal_size()
+            lines = status_lines(snapshot)
+            output = "\033[H\033[J"
+            top = max(1, (height - len(lines)) // 2 + 1)
+            for index, line in enumerate(lines[:height]):
+                # Clip by visible characters while retaining color sequences.
+                clipped, visible = "", 0
+                for part in re.split(r"(\033\[[0-9;]*m)", line):
+                    if ansi.fullmatch(part):
+                        clipped += part
+                    else:
+                        clipped += part[: max(0, width - 2 - visible)]
+                        visible += len(part)
+                output += f"\033[{top + index};2H{clipped}\033[0m"
+            frame = (output, width, height)
+            if frame != previous:
+                sys.stdout.write(output)
+                sys.stdout.flush()
+                previous = frame
+            time.sleep(1)
+    finally:
+        sys.stdout.write("\033[0m\033[?7h\033[?25h\033[?1049l")
+        sys.stdout.flush()
+
+
+def supervise(state_dir):
+    state_dir.mkdir(parents=True, exist_ok=True)
+    with (state_dir / "service.lock").open("w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            sys.exit("rex-status is already running")
+        child = None
+
+        def stop(_signum, _frame):
+            if child and child.poll() is None:
+                child.terminate()
+                try:
+                    child.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    child.kill()
+                    child.wait()
+            raise SystemExit(0)
+
+        signal.signal(signal.SIGTERM, stop)
+        signal.signal(signal.SIGINT, stop)
+        config = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+        while True:
+            rex = find_rex()
+            if rex:
+                child = subprocess.Popen([
+                    rex, "--autostart=false", "do", str(config / "rex/status.lua"), "--all",
+                    "--args", json.dumps({"state_dir": str(state_dir), "renderer": str(Path(__file__).resolve())}),
+                ])
+                child.wait()
+                print(f"Rex status disconnected (exit {child.returncode}); retrying in 5s", file=sys.stderr, flush=True)
+            time.sleep(5)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pane", action="store_true", help="render the shared status snapshot")
+    parser.add_argument("--state-dir", type=Path, default=Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "rex-status")
+    args = parser.parse_args()
+    if args.pane:
+        render(args.state_dir)
+    else:
+        supervise(args.state_dir)
+
+
+if __name__ == "__main__":
+    main()

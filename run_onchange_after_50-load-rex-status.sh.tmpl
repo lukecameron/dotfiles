@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+# rex-status: {{ include "dot_local/bin/executable_rex-status" | sha256sum }}
+# Lua: {{ include "dot_config/rex/status.lua" | sha256sum }}
+# plist: {{ include "private_Library/LaunchAgents/com.lukecameron.rex-status.plist.tmpl" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+label=com.lukecameron.rex-status
+plist="$HOME/Library/LaunchAgents/$label.plist"
+domain="gui/$(id -u)"
+
+launchctl bootout "$domain/$label" 2>/dev/null || true
+launchctl bootstrap "$domain" "$plist"
