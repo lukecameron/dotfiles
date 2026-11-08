@@ -14,4 +14,14 @@ plist="$HOME/Library/LaunchAgents/$label.plist"
 domain="gui/$(id -u)"
 
 launchctl bootout "$domain/$label" 2>/dev/null || true
+# bootout returns before launchd finishes removing a running job.
+attempt=0
+while launchctl print "$domain/$label" >/dev/null 2>&1; do
+	attempt=$((attempt + 1))
+	if [ "$attempt" -ge 100 ]; then
+		echo "Timed out waiting for $label to unload" >&2
+		exit 1
+	fi
+	sleep 0.1
+done
 launchctl bootstrap "$domain" "$plist"

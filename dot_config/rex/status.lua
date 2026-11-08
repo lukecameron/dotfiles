@@ -149,8 +149,8 @@ end
 rex.on("window_created", schedule)
 rex.on("block_closed", schedule)
 rex.on("session_created", schedule)
-rex.on("session_destroyed", function(ctx)
-    attached[ctx.session_id] = nil
+rex.on("session_destroyed", function(_, ev)
+    attached[ev.session_id] = nil
     schedule()
 end)
 rex.every(5, update)
