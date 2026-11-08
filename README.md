@@ -77,3 +77,76 @@ The tailnet policy must allow TCP port 22 and UDP ports 60000–61000 from the c
 Use `~/.zprofile.local` and `~/.zshrc.local` for machine-only shell configuration. These files are intentionally unmanaged.
 
 Codex's `config.toml` is a create-only seed. Chezmoi supplies initial defaults on a new machine, then leaves the file untouched so Codex can persist session settings locally without creating dotfile drift.
+
+## Ubuntu / Marcus profile (preparation)
+
+Linux initialization defaults the prompt name to `marcus`. macOS machine defaults
+and package automation remain unchanged. On Linux chezmoi selects only `.zshenv`,
+`.zprofile`, `.zshrc` and `.config/starship.toml`; lifecycle scripts (including
+Homebrew), agent configuration/skills, mise, GUI configuration and the exact
+Neovim directory are excluded. No installers run. Existing mutable state remains
+user-owned. Do not use `bootstrap.sh` on Ubuntu.
+
+Ansible in `lukecameron/homelab` owns the durable account/home foundation and
+explicitly selected Ubuntu packages. Chezmoi owns these selected shell/prompt
+files, only on explicit user action; Ansible must never continually apply them.
+Install native Zsh, fzf and zsh-autosuggestions for shell features. Neovim is
+needed for the configured editor; starship is optional and feature-detected.
+The Brewfile is not a Linux tool manifest. Do not install Homebrew here.
+
+Before applying on Marcus, inspect existing selected files as Luke without
+reading credentials, and review a dry-run diff for conflicts. Do not change
+credentials, agent security settings, SSH, sudo, groups or home permissions.
+Keep Bash as the login shell until an explicit shell-change decision.
+
+For staging use an isolated HOME, explicit source/destination/config/cache/state
+paths, personal role and Marcus machine data, and a checksum-verified official
+chezmoi binary. Use `--dry-run` and inspect the target list; assert there are no
+script, agent-config or Neovim targets. Stage an existing `.codex/config.toml`
+and `.config/nvim` sentinel to verify exclusion without using real personal data.
+
+Administrator preview procedure (run locally as Luke, with `HOME=/home/luke`):
+
+1. Review an immutable snapshot of the exact candidate commit, not upstream main.
+   Check the four target files and `.config` for existing data, symlinks, ownership
+   and modes privately. Confirm the private durable backup remains recoverable.
+   Do not copy backup contents into logs or repository files.
+2. Prepare a Luke-owned disposable review directory outside his home, containing
+   `config.toml` with `[data]`, `role="personal"`, `machineName="marcus"`.
+   Use the checksum-verified official chezmoi binary. Set `review_dir`,
+   `reviewed_source` and `chezmoi_binary` to these reviewed paths.
+3. Run the reviewed helper in Bash without loading personal startup files:
+
+```bash
+bash --noprofile --norc "$reviewed_source/tests/admin-candidates.sh" preview
+# Separate approved step; the helper repeats all metadata checks immediately:
+# bash --noprofile --norc "$reviewed_source/tests/admin-candidates.sh" apply
+```
+
+Export `review_dir`, `reviewed_source` and `chezmoi_binary` before invoking it.
+The helper checks real directory types, Luke UID/GID 3000, home mode 0750,
+`.config` mode 0700, and root ownership/non-writability of `/home`. It uses
+`lstat` to refuse ANY existing selected target, including regular files,
+directories, and live or dangling symlinks. These checks run immediately before
+both preview and apply, independently of chezmoi's conflict detection.
+`--error-on-conflict` with fresh state DOES NOT protect preexisting unmanaged
+files; a successful dry run is not proof of preservation. There is no override
+in this first-apply procedure. If a target exists, stop for a separate private
+backup, review and merge procedure, even if an earlier inspection found it absent.
+The durable backup must remain available; do not remove a target merely to pass
+this guard. The helper prints names and metadata errors only; avoid verbose/diff
+output in shared logs. Coordinate with Luke and stop concurrent home writers:
+preflight and chezmoi writes are separate operations, not an atomic no-clobber
+transaction. Recheck the reviewed source and binary before either command.
+
+Never add `--force`, `--parent-dirs`, a directory target, `init --apply` or `update`
+to this procedure. Stop for any existing target or metadata mismatch; merge personal settings deliberately,
+preserving unmanaged `.zprofile.local` and `.zshrc.local`. If `.config` is absent,
+review its creation separately. Existing parent modes must stay unchanged.
+Applying can replace the four selected files, and a later Zsh launch sources
+local overrides, SDKMAN and any installed mise/starship; preview/apply does not
+source them. Inspect those locally before a first real shell launch. No login
+shell switch, authentication copying, Homebrew or recurring home reconciliation.
+The isolated state/config in this procedure must be retained or deliberately
+handed over before subsequent chezmoi operations; do not silently switch to
+an existing default source/config/state.
