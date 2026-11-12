@@ -58,6 +58,10 @@ The script names each skill, so a new upstream skill stays out until it is read 
 
 Bumping the refresh marker in the script reinstalls from upstream's main branch. `npx skills update -g -y` also updates these skills, along with pstack.
 
+## lavish
+
+The `/lavish` skill from [kunchenguid/lavish-axi](https://github.com/kunchenguid/lavish-axi) is installed at user level for Claude Code, Codex, Pi and OpenCode by `run_onchange_after_40-install-lavish-skill.sh.tmpl`. mise installs the `lavish-axi` CLI it drives. Bumping the refresh marker in the script reinstalls the skill from upstream's main branch; `npx skills update -g -y` also updates it.
+
 ## Claude Code plugins
 
 Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.
