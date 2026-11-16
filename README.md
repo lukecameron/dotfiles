@@ -42,7 +42,7 @@ Coding agents on macOS share a headed Chrome Canary with its own profile in `~/L
 
 Pi's global settings are merged into its existing file so authentication, sessions, trust decisions, and caches stay machine-local. Existing provider and model selections are preserved; defaults are supplied only when missing. The managed settings keep startup quiet, deliver queued steering and follow-ups together, and pin `pi-web-access` for web research. Pi invokes npm through mise, and its terminal title shows the machine short name plus the current session or directory while it works.
 
-Shared agent guidance is rendered for each supported harness. Reusable cross-agent workflows live in `~/.agents/skills`; this setup includes evidence-backed change review and preregistered evaluation skills.
+Shared agent guidance is rendered for each supported harness. Reusable cross-agent workflows live in `~/.agents/skills`; this setup includes evidence-backed change review and preregistered evaluation skills, and `/redteam`, which has a subagent hunt for counterexamples that break a piece of work and locks the valid ones in as tests. `/redteam` is also linked into `~/.claude/skills` for Claude Code.
 
 LazyVim installs its plugins the first time `nvim` starts. Commit `~/.config/nvim/lazy-lock.json` through chezmoi whenever plugin versions change.
 
