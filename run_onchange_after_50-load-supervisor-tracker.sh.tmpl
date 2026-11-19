@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+# Reload the agent whenever its plist changes.
+# plist: {{ include "private_Library/LaunchAgents/com.github.slate-technologies.supervisor.tracker.plist.tmpl" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+# supervisor is installed from its own repository, not by these dotfiles.
+if [ ! -x "$HOME/.local/bin/supervisor" ]; then
+	exit 0
+fi
+
+label=com.github.slate-technologies.supervisor.tracker
+plist="$HOME/Library/LaunchAgents/$label.plist"
+domain="gui/$(id -u)"
+
+launchctl bootout "$domain/$label" 2>/dev/null || true
+launchctl bootstrap "$domain" "$plist"

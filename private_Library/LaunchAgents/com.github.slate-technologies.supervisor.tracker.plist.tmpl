@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.github.slate-technologies.supervisor.tracker</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{ .chezmoi.homeDir }}/.local/bin/supervisor</string>
+		<string>signal</string>
+		<string>daemon</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>{{ .chezmoi.homeDir }}/.local/share/mise/shims:/opt/homebrew/bin:/opt/homebrew/sbin:{{ .chezmoi.homeDir }}/.local/bin:{{ .chezmoi.homeDir }}/Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>SUPERVISOR_DIR</key>
+		<string>{{ .chezmoi.homeDir }}/.claude/supervisor</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/.claude/supervisor/track/daemon.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/.claude/supervisor/track/daemon.log</string>
+</dict>
+</plist>
