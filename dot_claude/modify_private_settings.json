@@ -6,9 +6,13 @@ if [ -z "$input" ]; then
 	input='{}'
 fi
 
+# Reports each Claude conversation to rexurrect, so restoring a Rex session after a
+# restart can resume it. This is what `rexurrect report claude --print-hook` prints.
+rexurrect='REXURRECT_STATE_DIR=/Users/luke/.local/state/rexurrect REXURRECT_CONFIG=/Users/luke/.config/rexurrect/config.toml /opt/homebrew/bin/rexurrect report claude'
+
 # Keys this repo owns in ~/.claude/settings.json. Everything else in the file
 # is left to Claude Code and the tools that write it.
-printf '%s\n' "$input" | jq '
+printf '%s\n' "$input" | jq --arg rexurrect "$rexurrect" '
 	.skipDangerousModePermissionPrompt = true
 	| .statusLine = {
 		type: "command",
@@ -24,6 +28,16 @@ printf '%s\n' "$input" | jq '
 				type: "command",
 				command: "~/.claude/hooks/stop-chrome-devtools-axi.sh",
 				timeout: 10
+			}]
+		}]
+	)
+	| .hooks.SessionStart = (
+		[(.hooks.SessionStart // [])[]
+			| select(any(.hooks[]?; .command == $rexurrect) | not)]
+		+ [{
+			hooks: [{
+				type: "command",
+				command: $rexurrect
 			}]
 		}]
 	)
