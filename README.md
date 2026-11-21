@@ -68,6 +68,27 @@ The `/lavish` skill from [kunchenguid/lavish-axi](https://github.com/kunchenguid
 
 Work machines get the Datadog plugin from the official marketplace, set to Slate's Datadog site (AU, `ap2`). Sign in once per machine: `/mcp`, select `plugin:datadog:mcp`, then Authenticate.
 
+## Local inference
+
+Ollama runs Thinking Machines' [Inkling 2 Mini](https://thinkingmachines.ai/news/inkling-2-mini/) locally. The `com.lukecameron.ollama` launchd agent keeps `ollama serve` running at login on `http://127.0.0.1:11434` with a 32K default context, and logs to `~/Library/Logs/ollama.log`. Ollama loads the model on the first request and unloads it after 5 minutes idle. Its API is native at `/api/chat` and OpenAI-compatible at `/v1`.
+
+```sh
+ollama run inkling-2-mini
+curl http://127.0.0.1:11434/v1/chat/completions -d '{"model": "inkling-2-mini", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+The model needs Ollama 0.40.17, which is still a prerelease, so `run_onchange_after_50-install-ollama.sh.tmpl` installs the official tarball, checked against its release checksum, into `~/.local/opt/ollama` and links `ollama` into `~/.local/bin`. Move it to `Brewfile.tmpl` once Homebrew ships 0.40.17 or later. The script also pulls the model (about 20GB) on Macs with 32GB or more of memory. `inkling-2-mini` is the model's native NVFP4 checkpoint, run by Ollama's MLX engine with the model's own draft head for speculative decoding. The model card recommends temperature 1.0 with no top-p, top-k or min-p truncation, and limits on output tokens and agent turns, because the model can get stuck in long reasoning loops.
+
+Measured on an M5 Max with 128GB, using a 2,400-token prompt and 512 output tokens:
+
+| Runtime | Prompt processing | Decode |
+| --- | --- | --- |
+| Ollama 0.40.17-rc4, MLX, native NVFP4 | 700–1,000 tokens/s | 46–52 tokens/s |
+| Unsloth llama.cpp b12588, UD-Q4_K_XL, `-fa on` | 570–700 tokens/s | 36 tokens/s |
+| The same, with the DSpark drafter | 510–550 tokens/s | 34–35 tokens/s |
+
+Ollama decodes faster with its defaults. Its flash attention and KV cache type settings do not apply to MLX models, and `OLLAMA_NUM_PARALLEL=1` made no measurable difference.
+
 ## Remote shell
 
 Mosh is installed on every machine and runs over Tailscale. On each destination Mac, enable **System Settings → General → Sharing → Remote Login**, then connect using its Tailscale MagicDNS name:

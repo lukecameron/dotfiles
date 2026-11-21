@@ -1,0 +1,60 @@
+#!/bin/sh
+set -eu
+
+# Reinstall, reload and pull whenever the version, model or plist changes.
+# plist: {{ include "private_Library/LaunchAgents/com.lukecameron.ollama.plist.tmpl" | sha256sum }}
+
+if [ "{{ .chezmoi.os }}" != "darwin" ]; then
+	exit 0
+fi
+
+# Inkling 2 Mini needs Ollama 0.40.17, which is still a prerelease and not in
+# Homebrew. Install the official tarball, checked against the release's
+# sha256sum.txt. Once Homebrew ships 0.40.17 or later, move this to Brewfile.tmpl.
+version=0.40.17-rc4
+sha256=202a96d5981bc1cc143d049fce98aa600281574fa5b2746039f3dad081d9fd81
+model=inkling-2-mini
+
+root="$HOME/.local/opt/ollama"
+dir="$root/$version"
+if [ ! -x "$dir/ollama" ]; then
+	tmp=$(mktemp -d)
+	trap 'rm -rf "$tmp"' EXIT HUP INT TERM
+	curl -fsSL -o "$tmp/ollama-darwin.tgz" \
+		"https://github.com/ollama/ollama/releases/download/v$version/ollama-darwin.tgz"
+	echo "$sha256  $tmp/ollama-darwin.tgz" | shasum -a 256 -c - >/dev/null
+	mkdir -p "$tmp/x"
+	tar -xzf "$tmp/ollama-darwin.tgz" -C "$tmp/x"
+	mkdir -p "$root"
+	rm -rf "$dir"
+	mv "$tmp/x" "$dir"
+fi
+ln -sfn "$version" "$root/current"
+for old in "$root"/*; do
+	case $(basename "$old") in "$version" | current) ;; *) rm -rf "$old" ;; esac
+done
+mkdir -p "$HOME/.local/bin"
+ln -sfn "$root/current/ollama" "$HOME/.local/bin/ollama"
+
+label=com.lukecameron.ollama
+plist="$HOME/Library/LaunchAgents/$label.plist"
+domain="gui/$(id -u)"
+
+launchctl bootout "$domain/$label" 2>/dev/null || true
+launchctl bootstrap "$domain" "$plist"
+
+# The model needs a Mac with 32GB or more of memory.
+if [ "$(sysctl -n hw.memsize)" -lt 34359738368 ]; then
+	exit 0
+fi
+
+tries=0
+until "$root/current/ollama" list >/dev/null 2>&1; do
+	tries=$((tries + 1))
+	if [ "$tries" -gt 60 ]; then
+		echo "Ollama did not start; see ~/Library/Logs/ollama.log" >&2
+		exit 1
+	fi
+	sleep 1
+done
+"$root/current/ollama" pull "$model"
