@@ -17,6 +17,8 @@ printf '%s\n' "$input" | jq '
   | .steeringMode = "all"
   | .followUpMode = "all"
   | .npmCommand = ["mise", "exec", "--", "npm"]
+  | .selfUpdateCommand = ["mise", "upgrade", "npm:{packageName}"]
+  | .skills = (((.skills // []) - ["!skills/*/claude"]) + ["!skills/*/claude"])
   | .packages = (
       (.packages // [])
       | map(select(

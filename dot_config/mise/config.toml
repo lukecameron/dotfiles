@@ -4,8 +4,10 @@ node = "lts"
 go = "latest"
 # Changing this file upgrades every tool below to its newest eligible release.
 # Bump this marker to roll the current Pi release across managed machines.
-# Pi refresh: 1.5.2
-"npm:@earendil-works/pi-coding-agent" = "latest"
+# Pi refresh: 1.6.0
+# Pi takes each release on the day it ships, so it is exempt from mise's 24h
+# minimum release age; the com.lukecameron.pi-upgrade agent upgrades it hourly.
+"npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
 "github:kunchenguid/treehouse" = "latest"
 "npm:gh-axi" = "latest"
 "npm:chrome-devtools-axi" = "latest"
