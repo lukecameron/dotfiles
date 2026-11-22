@@ -1,2 +1,0 @@
-# reviewd makes and keeps up the reviews session, so rexurrect leaves it alone.
-exclude_sessions = ["reviews"]
