@@ -5,6 +5,15 @@ import sys
 config = sys.stdin.read()
 if not config:
     config = 'model = "gpt-5.6-sol"\nmodel_reasoning_effort = "xhigh"\napproval_policy = "on-request"\nsandbox_mode = "workspace-write"\n'
+
+first_table = re.search(r'(?m)^\s*\[', config)
+root_end = first_table.start() if first_table else len(config)
+window = re.compile(r'(?m)^([ \t]*model_context_window[ \t]*=[ \t]*)[0-9_]+')
+root, updated = window.subn(r'\g<1>872000', config[:root_end], count=1)
+if not updated:
+    root = 'model_context_window = 872000\n' + root
+config = root + config[root_end:]
+
 status = 'status_line = ["model-with-reasoning", "current-dir", "context-used", "context-window-size", "five-hour-limit", "weekly-limit"]'
 section = re.search(r'(?m)^\[tui\][ \t]*(?:\r?\n|$)', config)
 if section:
