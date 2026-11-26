@@ -5,6 +5,10 @@
 {{- if eq $role "work" -}}
 {{- $defaultMachineName = "mitti-air" -}}
 {{- end -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{- $machineNames = append $machineNames "marcus" -}}
+{{- $defaultMachineName = "marcus" -}}
+{{- end -}}
 {{- $machineName := promptChoiceOnce . "machineName" "Machine prompt name" $machineNames $defaultMachineName -}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}

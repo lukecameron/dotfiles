@@ -4,18 +4,20 @@ typeset -U path PATH
 
 path=($HOME/.local/bin $path)
 
-if [[ -d /opt/homebrew/bin ]]; then
-  path=(/opt/homebrew/bin /opt/homebrew/sbin $path)
-elif [[ -d /usr/local/Homebrew/bin ]]; then
-  path=(/usr/local/bin /usr/local/sbin $path)
-fi
+if [[ $OSTYPE == darwin* ]]; then
+  if [[ -d /opt/homebrew/bin ]]; then
+    path=(/opt/homebrew/bin /opt/homebrew/sbin $path)
+  elif [[ -d /usr/local/Homebrew/bin ]]; then
+    path=(/usr/local/bin /usr/local/sbin $path)
+  fi
 
-# libpq is keg-only (it conflicts with a full PostgreSQL), so Homebrew leaves
-# psql and the other client tools out of its bin directory.
-for libpq_bin in /opt/homebrew/opt/libpq/bin /usr/local/opt/libpq/bin; do
-  [[ -d $libpq_bin ]] && path+=($libpq_bin) && break
-done
-unset libpq_bin
+  # libpq is keg-only (it conflicts with a full PostgreSQL), so Homebrew leaves
+  # psql and the other client tools out of its bin directory.
+  for libpq_bin in /opt/homebrew/opt/libpq/bin /usr/local/opt/libpq/bin; do
+    [[ -d $libpq_bin ]] && path+=($libpq_bin) && break
+  done
+  unset libpq_bin
+fi
 
 export NO_MISTAKES_TELEMETRY=0
 

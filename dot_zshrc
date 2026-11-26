@@ -38,18 +38,22 @@ compinit -C -d ${ZDOTDIR:-$HOME}/.zcompdump
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-if [[ -r /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+if [[ $OSTYPE == darwin* && -r /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-elif [[ -r /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+elif [[ $OSTYPE == linux* && -r /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ $OSTYPE == darwin* && -r /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 # Source fzf's static bindings instead of spawning `fzf --zsh` at startup.
 # ZLE is unavailable in forced interactive shells without a terminal.
 if [[ -o zle && -t 0 ]]; then
-  if [[ -r /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
+  if [[ $OSTYPE == darwin* && -r /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
     source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
-  elif [[ -r /usr/local/opt/fzf/shell/key-bindings.zsh ]]; then
+  elif [[ $OSTYPE == linux* && -r /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+  elif [[ $OSTYPE == darwin* && -r /usr/local/opt/fzf/shell/key-bindings.zsh ]]; then
     source /usr/local/opt/fzf/shell/key-bindings.zsh
   fi
 fi
